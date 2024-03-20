@@ -1,0 +1,39 @@
+package view
+
+import (
+	"github.com/axseem/learway/database"
+)
+
+templ IndexPage(decks []database.Deck) {
+	@layout() {
+		<div
+			class="flex h-dvh"
+		>
+			<div class="flex flex-col gap-4 p-2 bg-neutral-100">
+				<div class="p-2">
+					<h1 class="text-2xl font-light font-['Geist_Mono']">lerway</h1>
+				</div>
+				<input type="text" placeholder="Search for knowledge" class="p-4 rounded-xl"/>
+				<div class="flex flex-col">
+					<button class="p-2 rounded-full hover:bg-neutral-200">Recent</button>
+				</div>
+			</div>
+			<div class="w-full">
+				<div class="grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
+					for _, deck := range decks {
+						<a
+							x-data={ "{ cards: " + deck.Cards + " }" }
+							href="./deck/1"
+							class="border border-neutral-200 rounded-xl aspect-[3/2] flex flex-col gap-2 p-4 hover:bg-neutral-50 transition"
+						>
+							<span>{ deck.Title }</span>
+							<div>
+								<span x-text="cards.length + ' cards'" class="px-2 py-1 text-blue-500 rounded-full bg-blue-50"></span>
+							</div>
+						</a>
+					}
+				</div>
+			</div>
+		</div>
+	}
+}

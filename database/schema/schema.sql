@@ -1,0 +1,8 @@
+CREATE TABLE
+    deck (
+        id INTEGER PRIMARY KEY,
+        title TEXT NOT NULL,
+        cards TEXT NOT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
