@@ -3,7 +3,9 @@ package cmd
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -54,6 +56,40 @@ func Serve() error {
 		}
 
 		view.DeckPage(rawDeck).Render(r.Context(), w)
+	})
+
+	r.HandleFunc("GET /create", func(w http.ResponseWriter, r *http.Request) {
+		view.CreatePage().Render(r.Context(), w)
+	})
+
+	r.HandleFunc("POST /create", func(w http.ResponseWriter, r *http.Request) {
+		b, err := io.ReadAll(r.Body)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			log.Println(err)
+		}
+
+		deckParams := struct {
+			Title string
+			Cards [][2]string
+		}{}
+
+		err = json.Unmarshal(b, &deckParams)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			log.Println(err)
+		}
+
+		c, err := json.Marshal(deckParams.Cards)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			log.Println(err)
+		}
+
+		db.CreateDeck(context.Background(), database.CreateDeckParams{
+			Title: deckParams.Title,
+			Cards: string(c),
+		})
 	})
 
 	fmt.Println("Listening on :1323")

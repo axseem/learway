@@ -1,0 +1,30 @@
+package view
+
+templ CreatePage() {
+	@layout() {
+		<div class="flex flex-col items-center px-4 py-8">
+			<div class="w-full md:w-[736px] flex flex-col gap-8">
+				<a href="/" class="text-2xl font-light font-['Geist_Mono']">lerway</a>
+				<div
+					x-data="{ title: '', cards: [] }"
+					class="flex flex-col w-full gap-4"
+				>
+					<div class="flex flex-col gap-1">
+						<label for="title">Title of the deck</label>
+						<input @change="(e)=>title=e.target.value" :value="title" type="text" class="px-4 py-2 border rounded-lg"/>
+					</div>
+					<ul class="flex flex-col gap-4">
+						<template x-for="(card, index) in cards">
+							<li class="flex flex-col overflow-hidden border divide-y rounded-2xl">
+								<input @change="(e)=>cards[index][0]=e.target.value" :value="card[0]" :name="'cards['+index+'][0]'" class="w-full p-4"/>
+								<input @change="(e)=>cards[index][1]=e.target.value" :value="card[1]" :name="'cards['+index+'][1]'" class="w-full p-4 bg-neutral-50"/>
+							</li>
+						</template>
+					</ul>
+					<button @click="cards.push([])" class="p-4 rounded-full bg-neutral-100">+ Add card</button>
+					<button @click="fetch('/create', {method: 'POST', body: JSON.stringify($data)})" class="p-4 rounded-full bg-neutral-100">Create</button>
+				</div>
+			</div>
+		</div>
+	}
+}
