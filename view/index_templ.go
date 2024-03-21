@@ -33,7 +33,7 @@ func IndexPage(decks []database.Deck) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex h-dvh\"><div class=\"flex flex-col gap-4 p-2 bg-neutral-100\"><div class=\"p-2\"><h1 class=\"text-2xl font-light font-[&#39;Geist_Mono&#39;]\">lerway</h1></div><input type=\"text\" placeholder=\"Search for knowledge\" class=\"p-4 rounded-xl\"><div class=\"flex flex-col\"><button class=\"p-2 rounded-full hover:bg-neutral-200\">Recent</button></div></div><div class=\"w-full\"><div class=\"grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex h-dvh\"><div class=\"flex flex-col p-4 place-content-between bg-neutral-50\"><div class=\"flex flex-col gap-4\"><div class=\"flex gap-2 p-2\"><img src=\"/assets/img/logo-dark.svg\" alt=\"rts\"><h1 class=\"text-3xl text-black font-[&#39;Geist_Mono&#39;]\">lerway</h1></div><input type=\"text\" placeholder=\"Search for knowledge\" class=\"px-4 py-2 border rounded-full\"><div class=\"flex flex-col\"><button class=\"flex px-4 py-2 rounded-full bg-neutral-200/50\">Recent</button> <button class=\"flex px-4 py-2 rounded-full hover:bg-neutral-100 text-neutral-500\">Popular</button> <button class=\"flex px-4 py-2 rounded-full hover:bg-neutral-100 text-neutral-500\">Recomended</button></div></div><button class=\"p-4 font-medium bg-white border rounded-full hover:bg-neutral-200/30\">+ new deck</button></div><div class=\"w-full\"><div class=\"grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -46,20 +46,20 @@ func IndexPage(decks []database.Deck) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"./deck/1\" class=\"border border-neutral-200 rounded-xl aspect-[3/2] flex flex-col gap-2 p-4 hover:bg-neutral-50 transition\"><span>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"./deck/1\" class=\"border border-neutral-200 rounded-xl aspect-[2/1] flex flex-col gap-2 p-4 hover:bg-neutral-50 transition\"><span>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(deck.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/index.templ`, Line: 28, Col: 25}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/index.templ`, Line: 34, Col: 25}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span><div><span x-text=\"cards.length + &#39; cards&#39;\" class=\"px-2 py-1 text-blue-500 rounded-full bg-blue-50\"></span></div></a>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span><div class=\"flex gap-1\"><span x-text=\"cards.length + &#39; cards&#39;\" class=\"px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100\"></span> <span class=\"px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100\">4.2 ✦</span></div><div></div></a>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

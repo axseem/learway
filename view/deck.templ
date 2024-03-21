@@ -46,14 +46,20 @@ templ DeckPage(deck database.Deck) {
 						</button>
 					</div>
 				</div>
-				<ul class="flex flex-col gap-4">
-					<template x-for="(card, index) in cards">
-						<li class="flex flex-col overflow-hidden border divide-y rounded-2xl">
-							<span x-text="card[0]" class="w-full p-4"></span>
-							<span x-text="card[1]" class="w-full p-4 bg-neutral-50"></span>
-						</li>
-					</template>
-				</ul>
+				<div
+					x-data="{ hidden: true }"
+					class="flex flex-col gap-4"
+				>
+					<button x-on:click="hidden = !hidden" class="flex text-xl">Show list of cards +</button>
+					<ul x-show="!hidden" class="flex flex-col gap-4">
+						<template x-for="(card, index) in cards">
+							<li class="flex flex-col overflow-hidden border divide-y rounded-2xl">
+								<span x-text="card[0]" class="w-full p-4"></span>
+								<span x-text="card[1]" class="w-full p-4 bg-neutral-50"></span>
+							</li>
+						</template>
+					</ul>
+				</div>
 			</div>
 		</div>
 	}

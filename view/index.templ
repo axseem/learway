@@ -9,27 +9,35 @@ templ IndexPage(decks []database.Deck) {
 		<div
 			class="flex h-dvh"
 		>
-			<div class="flex flex-col gap-4 p-2 bg-neutral-100">
-				<div class="p-2">
-					<h1 class="text-2xl font-light font-['Geist_Mono']">lerway</h1>
+			<div class="flex flex-col p-4 place-content-between bg-neutral-50">
+				<div class="flex flex-col gap-4">
+					<div class="flex gap-2 p-2">
+						<img src="/assets/img/logo-dark.svg" alt="rts"/>
+						<h1 class="text-3xl text-black font-['Geist_Mono']">lerway</h1>
+					</div>
+					<input type="text" placeholder="Search for knowledge" class="px-4 py-2 border rounded-full"/>
+					<div class="flex flex-col">
+						<button class="flex px-4 py-2 rounded-full bg-neutral-200/50">Recent</button>
+						<button class="flex px-4 py-2 rounded-full hover:bg-neutral-100 text-neutral-500">Popular</button>
+						<button class="flex px-4 py-2 rounded-full hover:bg-neutral-100 text-neutral-500">Recomended</button>
+					</div>
 				</div>
-				<input type="text" placeholder="Search for knowledge" class="p-4 rounded-xl"/>
-				<div class="flex flex-col">
-					<button class="p-2 rounded-full hover:bg-neutral-200">Recent</button>
-				</div>
+				<button class="p-4 font-medium bg-white border rounded-full hover:bg-neutral-200/30">+ new deck</button>
 			</div>
 			<div class="w-full">
-				<div class="grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
+				<div class="grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 					for _, deck := range decks {
 						<a
 							x-data={ "{ cards: " + deck.Cards + " }" }
 							href="./deck/1"
-							class="border border-neutral-200 rounded-xl aspect-[3/2] flex flex-col gap-2 p-4 hover:bg-neutral-50 transition"
+							class="border border-neutral-200 rounded-xl aspect-[2/1] flex flex-col gap-2 p-4 hover:bg-neutral-50 transition"
 						>
 							<span>{ deck.Title }</span>
-							<div>
-								<span x-text="cards.length + ' cards'" class="px-2 py-1 text-blue-500 rounded-full bg-blue-50"></span>
+							<div class="flex gap-1">
+								<span x-text="cards.length + ' cards'" class="px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100"></span>
+								<span class="px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100">4.2 ✦</span>
 							</div>
+							<div></div>
 						</a>
 					}
 				</div>
