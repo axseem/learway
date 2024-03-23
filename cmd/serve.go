@@ -8,10 +8,10 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/axseem/learway/database"
 	"github.com/axseem/learway/view"
+	nanoid "github.com/matoous/go-nanoid/v2"
 	_ "modernc.org/sqlite"
 )
 
@@ -19,7 +19,7 @@ func GetDeck(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func Serve() error {
+func Serve(port string) error {
 	sqlite, err := sql.Open("sqlite", "./dev.db")
 	if err != nil {
 		log.Fatal(err)
@@ -41,15 +41,9 @@ func Serve() error {
 	})
 
 	r.HandleFunc("GET /deck/{id}", func(w http.ResponseWriter, r *http.Request) {
-		idWildcard := r.PathValue("id")
+		id := r.PathValue("id")
 
-		id, err := strconv.Atoi(idWildcard)
-		if err != nil {
-			w.Write([]byte(err.Error()))
-			log.Println(err)
-		}
-
-		rawDeck, err := db.GetDeck(context.Background(), int64(id))
+		rawDeck, err := db.GetDeck(context.Background(), id)
 		if err != nil {
 			w.Write([]byte(err.Error()))
 			log.Println(err)
@@ -86,12 +80,27 @@ func Serve() error {
 			log.Println(err)
 		}
 
-		db.CreateDeck(context.Background(), database.CreateDeckParams{
+		id, err := nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			log.Println(err)
+		}
+
+		err = db.CreateDeck(context.Background(), database.CreateDeckParams{
+			ID:    id,
 			Title: deckParams.Title,
 			Cards: string(c),
 		})
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			log.Println(err)
+		}
 	})
 
-	fmt.Println("Listening on :1323")
-	return http.ListenAndServe(":1323", r)
+	if port == "" {
+		port = "1323"
+	}
+
+	fmt.Println("Listening on " + port)
+	return http.ListenAndServe(":"+port, r)
 }

@@ -7,12 +7,13 @@ import (
 	"log"
 
 	"github.com/axseem/learway/database"
+	nanoid "github.com/matoous/go-nanoid/v2"
 )
 
-func Seed() {
+func Seed() error {
 	sqlite, err := sql.Open("sqlite", "./dev.db")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	db := database.New(sqlite)
 
@@ -22,14 +23,17 @@ func Seed() {
 		{"Top of the card 3", "The other side of the card 3"},
 	})
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	err = db.CreateDeck(context.Background(), database.CreateDeckParams{
+	id, err := nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return db.CreateDeck(context.Background(), database.CreateDeckParams{
+		ID:    id,
 		Title: "Demo Deck",
 		Cards: string(CardsJSON),
 	})
-	if err != nil {
-		log.Fatal(err)
-	}
 }

@@ -10,39 +10,46 @@ import (
 )
 
 const createDeck = `-- name: CreateDeck :exec
-INSERT INTO deck (
-  title, cards
-) VALUES (
-  ?, ?
-)
+INSERT INTO
+  deck (id, title, cards)
+VALUES
+  (?, ?, ?)
 `
 
 type CreateDeckParams struct {
+	ID    string
 	Title string
 	Cards string
 }
 
 func (q *Queries) CreateDeck(ctx context.Context, arg CreateDeckParams) error {
-	_, err := q.db.ExecContext(ctx, createDeck, arg.Title, arg.Cards)
+	_, err := q.db.ExecContext(ctx, createDeck, arg.ID, arg.Title, arg.Cards)
 	return err
 }
 
 const deleteDeck = `-- name: DeleteDeck :exec
 DELETE FROM deck
-WHERE id = ?
+WHERE
+  id = ?
 `
 
-func (q *Queries) DeleteDeck(ctx context.Context, id int64) error {
+func (q *Queries) DeleteDeck(ctx context.Context, id string) error {
 	_, err := q.db.ExecContext(ctx, deleteDeck, id)
 	return err
 }
 
 const getDeck = `-- name: GetDeck :one
-SELECT id, title, cards, created_at, updated_at FROM deck
-WHERE id = ? LIMIT 1
+SELECT
+  id, title, cards, created_at, updated_at
+FROM
+  deck
+WHERE
+  id = ?
+LIMIT
+  1
 `
 
-func (q *Queries) GetDeck(ctx context.Context, id int64) (Deck, error) {
+func (q *Queries) GetDeck(ctx context.Context, id string) (Deck, error) {
 	row := q.db.QueryRowContext(ctx, getDeck, id)
 	var i Deck
 	err := row.Scan(
@@ -56,8 +63,12 @@ func (q *Queries) GetDeck(ctx context.Context, id int64) (Deck, error) {
 }
 
 const listDecks = `-- name: ListDecks :many
-SELECT id, title, cards, created_at, updated_at FROM deck
-ORDER BY created_at DESC
+SELECT
+  id, title, cards, created_at, updated_at
+FROM
+  deck
+ORDER BY
+  created_at DESC
 `
 
 func (q *Queries) ListDecks(ctx context.Context) ([]Deck, error) {
@@ -91,14 +102,17 @@ func (q *Queries) ListDecks(ctx context.Context) ([]Deck, error) {
 
 const updateDeck = `-- name: UpdateDeck :exec
 UPDATE deck
-set title = ?, cards = ?
-WHERE id = ?
+set
+  title = ?,
+  cards = ?
+WHERE
+  id = ?
 `
 
 type UpdateDeckParams struct {
 	Title string
 	Cards string
-	ID    int64
+	ID    string
 }
 
 func (q *Queries) UpdateDeck(ctx context.Context, arg UpdateDeckParams) error {

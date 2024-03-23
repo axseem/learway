@@ -8,11 +8,10 @@ templ DeckPage(deck database.Deck) {
 	@layout() {
 		<div
 			x-data={ "{ cards: " + deck.Cards + ", cardIndex: 0, fliped: false }" }
-			class="flex flex-col items-center px-4 py-8"
+			class="flex flex-col items-center w-full px-4 py-8"
 		>
 			<div class="w-full md:w-[736px] flex flex-col gap-16">
 				<div class="flex flex-col gap-4">
-					<a href="/" class="text-2xl font-light font-['Geist_Mono'] mb-4">lerway</a>
 					<div>
 						<h1 class="text-3xl">{ deck.Title }</h1>
 					</div>

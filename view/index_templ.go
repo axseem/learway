@@ -34,7 +34,7 @@ func IndexPage(decks []database.Deck) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex h-dvh\"><div class=\"flex flex-col p-4 place-content-between bg-neutral-50\"><div class=\"flex flex-col gap-4\"><div class=\"flex gap-2 p-2\"><img src=\"/assets/img/logo-dark.svg\" alt=\"rts\"><h1 class=\"text-3xl text-black font-[&#39;Geist_Mono&#39;]\">lerway</h1></div><input type=\"text\" placeholder=\"Search for knowledge\" class=\"px-4 py-2 border rounded-full\"><div class=\"flex flex-col\"><button class=\"flex px-4 py-2 rounded-full bg-neutral-200/50\">Recent</button> <button class=\"flex px-4 py-2 rounded-full hover:bg-neutral-100 text-neutral-500\">Popular</button> <button class=\"flex px-4 py-2 rounded-full hover:bg-neutral-100 text-neutral-500\">Recomended</button></div></div><a href=\"/create\" class=\"p-4 font-medium bg-white border rounded-full hover:bg-neutral-200/30\">+ new deck</a></div><div class=\"w-full\"><div class=\"grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-full\"><div class=\"grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -63,7 +63,7 @@ func IndexPage(decks []database.Deck) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(deck.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/index.templ`, Line: 35, Col: 25}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/index.templ`, Line: 17, Col: 24}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -74,7 +74,7 @@ func IndexPage(decks []database.Deck) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -9,7 +9,7 @@ import (
 )
 
 type Deck struct {
-	ID        int64
+	ID        string
 	Title     string
 	Cards     string
 	CreatedAt time.Time

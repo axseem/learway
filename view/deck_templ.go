@@ -41,14 +41,14 @@ func DeckPage(deck database.Deck) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"flex flex-col items-center px-4 py-8\"><div class=\"w-full md:w-[736px] flex flex-col gap-16\"><div class=\"flex flex-col gap-4\"><a href=\"/\" class=\"text-2xl font-light font-[&#39;Geist_Mono&#39;] mb-4\">lerway</a><div><h1 class=\"text-3xl\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"flex flex-col items-center w-full px-4 py-8\"><div class=\"w-full md:w-[736px] flex flex-col gap-16\"><div class=\"flex flex-col gap-4\"><div><h1 class=\"text-3xl\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(deck.Title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/deck.templ`, Line: 16, Col: 39}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/deck.templ`, Line: 15, Col: 39}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

@@ -23,7 +23,7 @@ func layout() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"/assets/js/htmx.min.js\"></script><script src=\"/assets/js/alpine.min.js\"></script><link href=\"/assets/css/tailwind.css\" rel=\"stylesheet\"><title>learway</title></head><body hx-boost=\"true\" class=\"text-neutral-600 font-[&#39;Geist&#39;]\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"/assets/js/htmx.min.js\"></script><script src=\"/assets/js/alpine.min.js\"></script><link href=\"/assets/css/tailwind.css\" rel=\"stylesheet\"><title>learway</title></head><body hx-boost=\"true\" class=\"text-neutral-600 font-[&#39;Geist&#39;]\"><div class=\"flex h-screen\"><aside class=\"flex flex-col h-full p-4 place-content-between bg-neutral-50\"><div class=\"flex flex-col gap-4\"><div class=\"flex gap-2 p-2\"><img src=\"/assets/img/logo-dark.svg\" alt=\"rts\"> <a href=\"/\" class=\"text-3xl text-black font-[&#39;Geist_Mono&#39;]\">lerway</a></div><input type=\"text\" placeholder=\"Search for knowledge\" class=\"px-4 py-2 border rounded-full\"><div class=\"flex flex-col\"><button class=\"flex px-4 py-2 rounded-full bg-neutral-200/50\">Recent</button> <button class=\"flex px-4 py-2 rounded-full hover:bg-neutral-100 text-neutral-500\">Popular</button> <button class=\"flex px-4 py-2 rounded-full hover:bg-neutral-100 text-neutral-500\">Recomended</button></div></div><a href=\"/create\" class=\"p-4 font-medium bg-white border rounded-full hover:bg-neutral-200/30\">+ new deck</a></aside><div class=\"w-full h-full overflow-auto\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -31,7 +31,7 @@ func layout() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
