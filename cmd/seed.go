@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/axseem/learway/database"
+	"github.com/axseem/learway/internal/database"
 	nanoid "github.com/matoous/go-nanoid/v2"
 )
 

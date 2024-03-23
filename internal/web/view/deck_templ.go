@@ -11,7 +11,7 @@ import "io"
 import "bytes"
 
 import (
-	"github.com/axseem/learway/database"
+	"github.com/axseem/learway/internal/database"
 )
 
 func DeckPage(deck database.Deck) templ.Component {
@@ -48,7 +48,7 @@ func DeckPage(deck database.Deck) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(deck.Title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/deck.templ`, Line: 15, Col: 39}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/deck.templ`, Line: 15, Col: 39}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

@@ -9,8 +9,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/axseem/learway/database"
-	"github.com/axseem/learway/view"
+	"github.com/axseem/learway/internal/database"
+	"github.com/axseem/learway/internal/web"
+	"github.com/axseem/learway/internal/web/view"
 	nanoid "github.com/matoous/go-nanoid/v2"
 	_ "modernc.org/sqlite"
 )
@@ -28,7 +29,7 @@ func Serve(port string) error {
 
 	r := http.NewServeMux()
 
-	fs := http.FileServer(http.Dir("./assets"))
+	fs := http.FileServer(http.FS(web.Assets()))
 	r.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
