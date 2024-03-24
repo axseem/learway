@@ -7,7 +7,7 @@ import (
 templ DeckPage(deck database.Deck) {
 	@layout() {
 		<div
-			x-data={ "{ cards: " + deck.Cards + ", cardIndex: 0, fliped: false }" }
+			x-data={ "{ cards: " + string(deck.Cards) + ", cardIndex: 0, fliped: false }" }
 			class="flex flex-col items-center w-full px-4 py-8"
 		>
 			<div class="w-full md:w-[736px] flex flex-col gap-16">

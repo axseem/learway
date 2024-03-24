@@ -19,7 +19,7 @@ VALUES
 type CreateDeckParams struct {
 	ID    string
 	Title string
-	Cards string
+	Cards []byte
 }
 
 func (q *Queries) CreateDeck(ctx context.Context, arg CreateDeckParams) error {
@@ -111,7 +111,7 @@ WHERE
 
 type UpdateDeckParams struct {
 	Title string
-	Cards string
+	Cards []byte
 	ID    string
 }
 

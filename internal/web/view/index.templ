@@ -11,7 +11,7 @@ templ IndexPage(decks []database.Deck) {
 			<div class="grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 				for _, deck := range decks {
 					<a
-						x-data={ "{ cards: " + deck.Cards + " }" }
+						x-data={ "{ cards: " + string(deck.Cards) + " }" }
 						href={ templ.SafeURL("./deck/" + fmt.Sprint(deck.ID)) }
 						class="border border-neutral-200 rounded-xl aspect-[2/1] flex flex-col gap-2 p-4 hover:bg-neutral-50 transition"
 					>

@@ -11,7 +11,7 @@ import (
 type Deck struct {
 	ID        string
 	Title     string
-	Cards     string
+	Cards     []byte
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

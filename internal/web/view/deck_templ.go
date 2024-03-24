@@ -37,7 +37,7 @@ func DeckPage(deck database.Deck) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("{ cards: " + deck.Cards + ", cardIndex: 0, fliped: false }"))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("{ cards: " + string(deck.Cards) + ", cardIndex: 0, fliped: false }"))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

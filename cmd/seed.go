@@ -4,10 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"log"
 
 	"github.com/axseem/learway/internal/database"
 	nanoid "github.com/matoous/go-nanoid/v2"
+	_ "modernc.org/sqlite"
 )
 
 func Seed() error {
@@ -15,6 +15,7 @@ func Seed() error {
 	if err != nil {
 		return err
 	}
+
 	db := database.New(sqlite)
 
 	CardsJSON, err := json.Marshal([][2]string{
@@ -28,12 +29,12 @@ func Seed() error {
 
 	id, err := nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 
 	return db.CreateDeck(context.Background(), database.CreateDeckParams{
 		ID:    id,
 		Title: "Demo Deck",
-		Cards: string(CardsJSON),
+		Cards: CardsJSON,
 	})
 }
