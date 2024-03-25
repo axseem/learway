@@ -3,8 +3,6 @@ package cmd
 import (
 	"database/sql"
 	"errors"
-	"fmt"
-	"net/http"
 	"strconv"
 
 	"github.com/axseem/learway/internal/database"
@@ -26,9 +24,11 @@ func Serve(port string) error {
 	if err != nil {
 		return err
 	}
+	defer sqlite.Close()
 
 	db := database.New(sqlite)
 
-	fmt.Println("Listening on " + port)
-	return http.ListenAndServe(":"+port, web.App(db))
+	app := web.App(db)
+	app.Logger.Fatal(app.Start(":" + port))
+	return nil
 }
