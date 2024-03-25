@@ -11,13 +11,6 @@ import (
 )
 
 func Seed() error {
-	sqlite, err := sql.Open("sqlite", "./dev.db")
-	if err != nil {
-		return err
-	}
-
-	db := database.New(sqlite)
-
 	CardsJSON, err := json.Marshal([][2]string{
 		{"Top of the card 1", "The other side of the card 1"},
 		{"Top of the card 2", "The other side of the card 2"},
@@ -31,6 +24,14 @@ func Seed() error {
 	if err != nil {
 		return err
 	}
+
+	sqlite, err := sql.Open("sqlite", "./dev.db")
+	if err != nil {
+		return err
+	}
+	defer sqlite.Close()
+
+	db := database.New(sqlite)
 
 	return db.CreateDeck(context.Background(), database.CreateDeckParams{
 		ID:    id,
