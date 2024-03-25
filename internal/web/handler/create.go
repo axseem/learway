@@ -15,35 +15,33 @@ func CreatePage(c echo.Context) error {
 	return render(c, view.CreatePage())
 }
 
-func CreateDeck(db *database.Queries) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		b, err := io.ReadAll(c.Request().Body)
-		if err != nil {
-			return err
-		}
-
-		deckParams := struct {
-			Title string
-			Cards [][2]string
-		}{}
-		if err = json.Unmarshal(b, &deckParams); err != nil {
-			return err
-		}
-
-		cards, err := json.Marshal(deckParams.Cards)
-		if err != nil {
-			return err
-		}
-
-		id, err := gonanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
-		if err != nil {
-			return err
-		}
-
-		return db.CreateDeck(context.Background(), database.CreateDeckParams{
-			ID:    id,
-			Title: deckParams.Title,
-			Cards: cards,
-		})
+func CreateDeck(c echo.Context, db *database.Queries) error {
+	b, err := io.ReadAll(c.Request().Body)
+	if err != nil {
+		return err
 	}
+
+	deckParams := struct {
+		Title string
+		Cards [][2]string
+	}{}
+	if err = json.Unmarshal(b, &deckParams); err != nil {
+		return err
+	}
+
+	cards, err := json.Marshal(deckParams.Cards)
+	if err != nil {
+		return err
+	}
+
+	id, err := gonanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
+	if err != nil {
+		return err
+	}
+
+	return db.CreateDeck(context.Background(), database.CreateDeckParams{
+		ID:    id,
+		Title: deckParams.Title,
+		Cards: cards,
+	})
 }

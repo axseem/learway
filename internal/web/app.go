@@ -6,14 +6,23 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func attachDB(
+	handler func(c echo.Context, db *database.Queries) error,
+	db *database.Queries,
+) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return handler(c, db)
+	}
+}
+
 func App(db *database.Queries) *echo.Echo {
 	e := echo.New()
 	e.StaticFS("/assets/", AssetsFS())
 
-	e.GET("/", handler.IndexPage(db))
-	e.GET("/deck/:id", handler.DeckPage(db))
+	e.GET("/", attachDB(handler.IndexPage, db))
+	e.GET("/deck/:id", attachDB(handler.DeckPage, db))
 	e.GET("/create", handler.CreatePage)
-	e.POST("/create", handler.CreateDeck(db))
+	e.POST("/create", attachDB(handler.CreateDeck, db))
 
 	return e
 }
