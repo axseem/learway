@@ -12,10 +12,11 @@ import "bytes"
 
 import (
 	"fmt"
-	"github.com/axseem/learway/internal/database"
+	"github.com/axseem/learway/internal/model"
+	"strconv"
 )
 
-func IndexPage(decks []database.Deck) templ.Component {
+func IndexPage(decks []model.Deck) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -43,7 +44,7 @@ func IndexPage(decks []database.Deck) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("{ cards: " + string(deck.Cards) + " }"))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("{ cardsAmount: " + strconv.Itoa(len(deck.Cards)) + " }"))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -63,13 +64,13 @@ func IndexPage(decks []database.Deck) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(deck.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/index.templ`, Line: 17, Col: 24}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/view/index.templ`, Line: 18, Col: 24}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span><div class=\"flex gap-1\"><span x-text=\"cards.length + &#39; cards&#39;\" class=\"px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100\"></span> <span class=\"px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100\">4.2 ✦</span></div><div></div></a>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span><div class=\"flex gap-1\"><span x-text=\"cardsAmount + &#39; cards&#39;\" class=\"px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100\"></span> <span class=\"px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100\">4.2 ✦</span></div><div></div></a>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

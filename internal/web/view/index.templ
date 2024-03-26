@@ -1,23 +1,24 @@
 package view
 
 import (
-	"github.com/axseem/learway/internal/database"
 	"fmt"
+	"github.com/axseem/learway/internal/model"
+	"strconv"
 )
 
-templ IndexPage(decks []database.Deck) {
+templ IndexPage(decks []model.Deck) {
 	@layout() {
 		<div class="w-full">
 			<div class="grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 				for _, deck := range decks {
 					<a
-						x-data={ "{ cards: " + string(deck.Cards) + " }" }
+						x-data={ "{ cardsAmount: " + strconv.Itoa(len(deck.Cards)) + " }" }
 						href={ templ.SafeURL("./deck/" + fmt.Sprint(deck.ID)) }
 						class="border border-neutral-200 rounded-xl aspect-[2/1] flex flex-col gap-2 p-4 hover:bg-neutral-50 transition"
 					>
 						<span>{ deck.Title }</span>
 						<div class="flex gap-1">
-							<span x-text="cards.length + ' cards'" class="px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100"></span>
+							<span x-text="cardsAmount + ' cards'" class="px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100"></span>
 							<span class="px-2 py-0.5 rounded-full text-neutral-500 bg-neutral-100">4.2 ✦</span>
 						</div>
 						<div></div>
