@@ -27,7 +27,7 @@ type DeckUpdateParams struct {
 type DeckRepo interface {
 	Get(ctx context.Context, id string) (*Deck, error)
 	List(ctx context.Context) ([]Deck, error)
-	Create(ctx context.Context, arg DeckCreateParams) error
+	Create(ctx context.Context, arg DeckCreateParams) (*Deck, error)
 	Update(ctx context.Context, arg DeckUpdateParams) error
 	Delete(ctx context.Context, id string) error
 }

@@ -65,22 +65,27 @@ func (s DeckService) List(ctx context.Context) ([]model.Deck, error) {
 	return deckList, nil
 }
 
-func (s DeckService) Create(ctx context.Context, arg model.DeckCreateParams) error {
+func (s DeckService) Create(ctx context.Context, arg model.DeckCreateParams) (*model.Deck, error) {
 	id, err := gonanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
 	if err != nil {
-		return err
+		return &model.Deck{}, err
 	}
 
 	cardsJSON, err := json.Marshal(arg.Cards)
 	if err != nil {
-		return err
+		return &model.Deck{}, err
 	}
 
-	return s.db.CreateDeck(ctx, database.CreateDeckParams{
+	err = s.db.CreateDeck(ctx, database.CreateDeckParams{
 		ID:    id,
 		Title: arg.Title,
 		Cards: cardsJSON,
 	})
+	if err != nil {
+		return &model.Deck{}, err
+	}
+
+	return s.Get(ctx, id)
 }
 
 func (s DeckService) Update(ctx context.Context, arg model.DeckUpdateParams) error {

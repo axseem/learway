@@ -25,5 +25,11 @@ func (h BaseHandeler) CreateDeck(c echo.Context) error {
 		return err
 	}
 
-	return h.DeckService.Create(c.Request().Context(), args)
+	deck, err := h.DeckService.Create(c.Request().Context(), args)
+	if err != nil {
+		return err
+	}
+
+	c.JSON(200, deck)
+	return nil
 }

@@ -21,7 +21,13 @@ templ CreatePage() {
 						</template>
 					</ul>
 					<button @click="cards.push([])" class="p-4 rounded-full bg-neutral-100">+ Add card</button>
-					<button @click="fetch('/create', {method: 'POST', body: JSON.stringify($data)}); window.location.replace('/')" class="p-4 rounded-full bg-neutral-100">Create</button>
+					<button
+						@click="
+							await fetch('/create', {method: 'POST', body: JSON.stringify($data)})
+								.then(r => r.json().then(data => window.location.replace('/deck/'+data.ID)))
+						"
+						class="p-4 rounded-full bg-neutral-100"
+					>Create</button>
 				</div>
 			</div>
 		</div>
