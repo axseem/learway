@@ -1,12 +1,14 @@
 package handler
 
-import "github.com/axseem/learway/internal/service"
+import (
+	"github.com/axseem/learway/internal/model"
+)
 
 type BaseHandeler struct {
-	DeckService service.DeckService
+	DeckService model.DeckRepo
 }
 
-func NewBaseHandler(ds service.DeckService) *BaseHandeler {
+func NewBaseHandler(ds model.DeckRepo) *BaseHandeler {
 	return &BaseHandeler{
 		DeckService: ds,
 	}
