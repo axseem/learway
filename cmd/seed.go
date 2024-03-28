@@ -3,39 +3,35 @@ package cmd
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 
 	"github.com/axseem/learway/internal/database"
-	nanoid "github.com/matoous/go-nanoid/v2"
+	"github.com/axseem/learway/internal/model"
+	"github.com/axseem/learway/internal/service"
 	_ "modernc.org/sqlite"
 )
 
 func Seed() error {
-	CardsJSON, err := json.Marshal([][2]string{
-		{"Top of the card 1", "The other side of the card 1"},
-		{"Top of the card 2", "The other side of the card 2"},
-		{"Top of the card 3", "The other side of the card 3"},
-	})
-	if err != nil {
-		return err
-	}
-
-	id, err := nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
-	if err != nil {
-		return err
-	}
-
 	sqlite, err := sql.Open("sqlite", "./dev.db")
 	if err != nil {
 		return err
 	}
 	defer sqlite.Close()
 
-	db := database.New(sqlite)
+	s := service.NewDeckService(database.New(sqlite))
 
-	return db.CreateDeck(context.Background(), database.CreateDeckParams{
-		ID:    id,
-		Title: "Demo Deck",
-		Cards: CardsJSON,
+	_, err = s.Create(context.Background(), model.DeckCreateParams{
+		Title: "Words for describing things",
+		Cards: [][2]string{
+			{"Untidy and in bad condition", "Shabby"},
+			{"Causing a lot of problems for someone", "Troublesome"},
+			{"Annoying and making you lose patience", "Tiresome"},
+			{"Likely to upset someone", "Tasteless"},
+			{"Extremely clean", "Spotless"},
+			{"Attractive because of being unusual and especially old-fashioned", "Quaint"},
+			{"Slightly unpleasant or worrying so that you do not want to get involved in any way", "Off-putting"},
+			{"Neither small nor large in size, amount, degree, or strength", "Moderate"},
+		},
 	})
+
+	return err
 }
