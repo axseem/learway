@@ -5,8 +5,10 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/axseem/learway/internal/api"
 	"github.com/axseem/learway/internal/database"
 	"github.com/axseem/learway/internal/web"
+	"github.com/labstack/echo/v4"
 	_ "modernc.org/sqlite"
 )
 
@@ -28,7 +30,10 @@ func Serve(port string) error {
 
 	db := database.New(sqlite)
 
-	app := web.App(db)
-	app.Logger.Fatal(app.Start(":" + port))
+	e := echo.New()
+
+	web.App(e, db)
+	api.API(e, db)
+	e.Logger.Fatal(e.Start(":" + port))
 	return nil
 }

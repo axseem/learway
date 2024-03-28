@@ -7,8 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func App(db *database.Queries) *echo.Echo {
-	e := echo.New()
+func App(e *echo.Echo, db *database.Queries) {
 	e.StaticFS("/assets/", AssetsFS())
 
 	h := handler.NewBaseHandler(*service.NewDeckService(db))
@@ -16,8 +15,4 @@ func App(db *database.Queries) *echo.Echo {
 	e.GET("/", h.IndexPage)
 	e.GET("/deck/:id", h.DeckPage)
 	e.GET("/create", h.CreatePage)
-	// TODO use api instead
-	e.POST("/create", h.CreateDeck)
-
-	return e
 }

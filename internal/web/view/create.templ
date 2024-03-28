@@ -2,6 +2,17 @@ package view
 
 templ CreatePage() {
 	@layout() {
+		<script type="text/javascript">
+			async function createRequest(body) {
+				await fetch("/api/create", { method: "POST", body: JSON.stringify(body) }).then((r) => {
+				    if (r.status >= 400 && r.status < 500) {
+				        r.json().then((data) => alert(data.message));
+				    } else if (r.status >= 200 && r.status < 300) {
+				        r.json().then((data) => window.location.replace("/deck/" + data.ID));
+				    }
+				});
+			}
+		</script>
 		<div class="flex flex-col items-center w-full px-4 py-8">
 			<div class="w-full md:w-[736px] flex flex-col gap-8">
 				<div
@@ -22,10 +33,7 @@ templ CreatePage() {
 					</ul>
 					<button @click="cards.push([])" class="p-4 rounded-full bg-neutral-100">+ Add card</button>
 					<button
-						@click="
-							await fetch('/create', {method: 'POST', body: JSON.stringify($data)})
-								.then(r => r.json().then(data => window.location.replace('/deck/'+data.ID)))
-						"
+						@click="await createRequest($data)"
 						class="p-4 rounded-full bg-neutral-100"
 					>Create</button>
 				</div>
