@@ -30,4 +30,6 @@ type DeckRepo interface {
 	Create(ctx context.Context, arg DeckCreateParams) (*Deck, error)
 	Update(ctx context.Context, arg DeckUpdateParams) error
 	Delete(ctx context.Context, id string) error
+	ValidateCreateParams(arg DeckCreateParams) error
+	ValidateUpdateParams(ctx context.Context, arg DeckUpdateParams) error
 }

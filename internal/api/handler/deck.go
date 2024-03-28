@@ -11,34 +11,28 @@ import (
 func (h BaseHandeler) CreateDeck(c echo.Context) error {
 	b, err := io.ReadAll(c.Request().Body)
 	if err != nil {
-		return err
+		code := echo.ErrInternalServerError.Code
+		message := "failed to read body"
+		return echo.NewHTTPError(code, message)
 	}
 
-	var args model.DeckCreateParams
-	if err = json.Unmarshal(b, &args); err != nil {
-		return err
+	var arg model.DeckCreateParams
+	if err = json.Unmarshal(b, &arg); err != nil {
+		code := echo.ErrBadRequest.Code
+		message := "failed to parse body"
+		return echo.NewHTTPError(code, message)
 	}
 
-	if len(args.Title) == 0 || len(args.Title) > 255 {
-		message := "title length must be greater than 0 and less than 256"
-		return echo.NewHTTPError(echo.ErrBadRequest.Code, message)
+	if err = h.DeckService.ValidateCreateParams(arg); err != nil {
+		code := echo.ErrBadRequest.Code
+		return echo.NewHTTPError(code, err)
 	}
 
-	if len(args.Cards) == 0 || len(args.Title) > 4096 {
-		message := "cards amount must be greater than 0 and less than 4096"
-		return echo.NewHTTPError(echo.ErrBadRequest.Code, message)
-	}
-
-	for _, card := range args.Cards {
-		if len(card[0]) <= 0 || len(card[0]) > 1024 || len(card[1]) <= 0 || len(card[1]) > 1024 {
-			message := "cards' content length must be greater than 0 and less than 1024"
-			return echo.NewHTTPError(echo.ErrBadRequest.Code, message)
-		}
-	}
-
-	deck, err := h.DeckService.Create(c.Request().Context(), args)
+	deck, err := h.DeckService.Create(c.Request().Context(), arg)
 	if err != nil {
-		return err
+		code := echo.ErrInternalServerError.Code
+		message := "failed to create deck"
+		return echo.NewHTTPError(code, message)
 	}
 
 	c.JSON(200, deck)

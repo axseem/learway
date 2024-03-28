@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"strconv"
 
 	"github.com/axseem/learway/internal/database"
 	"github.com/axseem/learway/internal/model"
@@ -103,4 +105,39 @@ func (s DeckService) Update(ctx context.Context, arg model.DeckUpdateParams) err
 
 func (s DeckService) Delete(ctx context.Context, id string) error {
 	return s.db.DeleteDeck(ctx, id)
+}
+
+func (s DeckService) ValidateCreateParams(arg model.DeckCreateParams) error {
+	const maxTitleLen = 256
+	const maxCardsAmount = 4096
+	const maxContentLen = 1024
+
+	if len(arg.Title) == 0 || len(arg.Title) > maxTitleLen {
+		return errors.New("title length must be greater than 0 and less than " + strconv.Itoa(maxTitleLen))
+	}
+
+	if len(arg.Cards) == 0 || len(arg.Title) > maxCardsAmount {
+		return errors.New("cards amount must be greater than 0 and less than " + strconv.Itoa(maxCardsAmount))
+
+	}
+
+	for _, card := range arg.Cards {
+		if len(card[0]) <= 0 || len(card[0]) > maxContentLen || len(card[1]) <= 0 || len(card[1]) > maxContentLen {
+			return errors.New("cards' content length must be greater than 0 and less than " + strconv.Itoa(maxContentLen))
+		}
+	}
+
+	return nil
+}
+
+func (s DeckService) ValidateUpdateParams(ctx context.Context, arg model.DeckUpdateParams) error {
+	_, err := s.Get(ctx, arg.ID)
+	if err != nil {
+		return err
+	}
+
+	return s.ValidateCreateParams(model.DeckCreateParams{
+		Title: arg.Title,
+		Cards: arg.Cards,
+	})
 }
