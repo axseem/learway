@@ -1,18 +1,20 @@
 package web
 
 import (
+	"embed"
+	"io/fs"
+
 	"github.com/axseem/learway/internal/database"
-	"github.com/axseem/learway/internal/service"
-	"github.com/axseem/learway/internal/web/handler"
 	"github.com/labstack/echo/v4"
 )
 
+//go:embed all:build
+var buildFiles embed.FS
+
+func buildFS() fs.FS {
+	return echo.MustSubFS(buildFiles, "build")
+}
+
 func App(e *echo.Echo, db *database.Queries) {
-	e.StaticFS("/assets/", AssetsFS())
-
-	h := handler.NewBaseHandler(*service.NewDeckService(db))
-
-	e.GET("/", h.IndexPage)
-	e.GET("/deck/:id", h.DeckPage)
-	e.GET("/create", h.CreatePage)
+	e.StaticFS("/", buildFS())
 }

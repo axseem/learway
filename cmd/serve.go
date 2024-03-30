@@ -32,8 +32,8 @@ func Serve(port string) error {
 
 	e := echo.New()
 
-	web.App(e, db)
 	api.API(e, db)
+	web.App(e, db)
 	e.Logger.Fatal(e.Start(":" + port))
 	return nil
 }
