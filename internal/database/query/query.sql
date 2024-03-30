@@ -26,7 +26,8 @@ VALUES
 UPDATE deck
 set
   title = ?,
-  cards = ?
+  cards = ?,
+  updated_at = CURRENT_TIMESTAMP
 WHERE
   id = ?;
 

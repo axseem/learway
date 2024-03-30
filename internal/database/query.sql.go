@@ -104,7 +104,8 @@ const updateDeck = `-- name: UpdateDeck :exec
 UPDATE deck
 set
   title = ?,
-  cards = ?
+  cards = ?,
+  updated_at = CURRENT_TIMESTAMP
 WHERE
   id = ?
 `
