@@ -1,4 +1,4 @@
-![banner](./internal/web/assets/img/banner.svg)
+![banner](./assets/banner.svg)
 
 # What is lerway?
 
