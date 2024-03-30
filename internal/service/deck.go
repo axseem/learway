@@ -90,17 +90,22 @@ func (s DeckService) Create(ctx context.Context, arg model.DeckCreateParams) (*m
 	return s.Get(ctx, id)
 }
 
-func (s DeckService) Update(ctx context.Context, arg model.DeckUpdateParams) error {
+func (s DeckService) Update(ctx context.Context, id string, arg model.DeckCreateParams) (*model.Deck, error) {
 	cardsJSON, err := json.Marshal(arg.Cards)
 	if err != nil {
-		return err
+		return &model.Deck{}, err
 	}
 
-	return s.db.UpdateDeck(ctx, database.UpdateDeckParams{
-		ID:    arg.ID,
+	err = s.db.UpdateDeck(ctx, database.UpdateDeckParams{
+		ID:    id,
 		Title: arg.Title,
 		Cards: cardsJSON,
 	})
+	if err != nil {
+		return &model.Deck{}, err
+	}
+
+	return s.Get(ctx, id)
 }
 
 func (s DeckService) Delete(ctx context.Context, id string) error {

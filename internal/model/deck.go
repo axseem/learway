@@ -18,17 +18,11 @@ type DeckCreateParams struct {
 	Cards [][2]string
 }
 
-type DeckUpdateParams struct {
-	ID    string
-	Title string
-	Cards [][2]string
-}
-
 type DeckRepo interface {
 	Get(ctx context.Context, id string) (*Deck, error)
 	List(ctx context.Context) ([]Deck, error)
 	Create(ctx context.Context, arg DeckCreateParams) (*Deck, error)
-	Update(ctx context.Context, arg DeckUpdateParams) error
+	Update(ctx context.Context, id string, arg DeckCreateParams) (*Deck, error)
 	Delete(ctx context.Context, id string) error
 	ValidateCreateParams(arg DeckCreateParams) error
 	ValidateUpdateParams(ctx context.Context, arg DeckUpdateParams) error
