@@ -1,0 +1,1 @@
+import{a as t,t as r}from"../chunks/disclose-version.B5O2_7qn.js";import{p as e,a as m}from"../chunks/runtime.Ci3hg3TL.js";import{i as s}from"../chunks/lifecycle.D5By6dP3.js";var i=r("create deck",1);function d(a,o){m(o,!1),s();var p=i();t(a,p),e()}export{d as component};

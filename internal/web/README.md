@@ -1,3 +1,3 @@
-# Lerway web app
+# Learway web app
 
-Web UI for lerway built with sveltekit
+Web UI for learway built with sveltekit
