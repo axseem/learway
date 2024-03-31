@@ -9,6 +9,7 @@ import (
 	"github.com/axseem/learway/internal/database"
 	"github.com/axseem/learway/internal/web"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	_ "modernc.org/sqlite"
 )
 
@@ -31,6 +32,9 @@ func Serve(port string) error {
 	db := database.New(sqlite)
 
 	e := echo.New()
+	e.Use(middleware.CORS())
+	e.Use(middleware.Logger())
+	e.Use(middleware.Gzip())
 
 	api.API(e, db)
 	web.App(e, db)

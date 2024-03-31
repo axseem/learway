@@ -6,7 +6,6 @@ import (
 	"github.com/axseem/learway/internal/service"
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 type BaseValidator struct {
@@ -19,7 +18,6 @@ func (bv *BaseValidator) Validate(i interface{}) error {
 
 func API(e *echo.Echo, db *database.Queries) {
 	g := e.Group("/api")
-	e.Use(middleware.Logger())
 
 	e.Validator = &BaseValidator{Validator: validator.New()}
 
