@@ -6,7 +6,7 @@
 	let { children } = $props();
 </script>
 
-<div class="flex h-screen">
+<div class="bg-background text-foreground flex h-screen">
 	<aside class="flex h-full w-60 shrink-0 flex-col border-r">
 		<a class="border-b p-4 font-mono" href="/">learway</a>
 		<div class="px-4 pt-4">
@@ -21,7 +21,7 @@
 			<Button href="/create">Create deck</Button>
 		</div>
 	</aside>
-	<div class="bg-muted/40 h-screen w-full scroll-auto p-4">
+	<div class="bg-muted/40 h-screen w-full overflow-auto p-4">
 		{@render children()}
 	</div>
 </div>

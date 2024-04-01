@@ -1,12 +1,5 @@
 import { apiUrl } from '$lib/api.js';
-
-type Deck = {
-    id: string;
-    title: string;
-    cards: [string, string][];
-    createdAt: string;
-    updatedAt: string;
-};
+import type { Deck } from '$lib/types.js';
 
 export const load = async ({ fetch, params }) => {
     let r = await fetch(apiUrl + '/deck/' + params.id, {

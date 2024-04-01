@@ -9,7 +9,7 @@
 
 <div class="flex h-full flex-col items-center justify-center">
 	<div class="flex w-full max-w-[40rem] flex-col">
-		<h1 class="pb-2 font-mono text-3xl font-semibold">Personal way to learn</h1>
+		<h1 class="pb-4 font-mono text-3xl font-semibold">Your way to knowledge</h1>
 		<Input placeholder="Write deck ID or keywords..." class="w-full px-4 py-6" />
 		<div class="grid w-full grid-cols-2 grid-rows-2 gap-2 pt-4">
 			{#each data.decks as deck}
