@@ -86,18 +86,18 @@
 			</div>
 			<div class="w-full"></div>
 		</div>
-		<h2 class="pt-4 text-lg font-medium">List of cards</h2>
-		<ul class="flex flex-col gap-4 pb-12">
-			{#each deck.cards as card, i}
-				<li class="w-full divide-y overflow-hidden rounded-lg border">
-					<div class="p-4">
-						<p>{card[0]}</p>
-					</div>
-					<div class="bg-muted text-muted-foreground p-4">
-						<p>{card[1]}</p>
-					</div>
-				</li>
-			{/each}
-		</ul>
+		<details open>
+			<summary class="select-none pb-2 pt-4 text-lg font-medium hover:cursor-pointer"
+				>List of cards</summary
+			>
+			<ul class="flex flex-col gap-4 pb-12">
+				{#each deck.cards as card, i}
+					<li class="bg-card flex w-full divide-x overflow-hidden rounded-lg border p-6">
+						<p class="w-full p-2">{card[0]}</p>
+						<p class="w-full p-2 pl-8">{card[1]}</p>
+					</li>
+				{/each}
+			</ul>
+		</details>
 	</div>
 </div>

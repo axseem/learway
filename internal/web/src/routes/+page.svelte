@@ -4,7 +4,6 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 
 	let { data } = $props();
-	$effect(() => {});
 </script>
 
 <div class="flex h-full flex-col items-center justify-center">
@@ -15,12 +14,12 @@
 			{#each data.decks as deck}
 				<div class="aspect-[2/1] w-full">
 					<Button
-						href={'deck/' + deck.id}
+						href={'/deck/' + deck.id}
 						variant="outline"
 						class="h-full w-full flex-col items-start justify-start gap-2 overflow-hidden rounded-xl p-4"
 					>
 						<p class="w-full text-wrap">{deck.title}</p>
-						<Badge variant="secondary">{deck.cards.length} cards</Badge>
+						<Badge>{deck.cards.length} cards</Badge>
 					</Button>
 				</div>
 			{/each}
