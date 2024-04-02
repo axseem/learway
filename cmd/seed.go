@@ -22,14 +22,14 @@ func Seed() error {
 	_, err = s.Create(context.Background(), model.DeckCreateParams{
 		Title: "Words for describing things",
 		Cards: [][2]string{
-			{"Untidy and in bad condition", "Shabby"},
-			{"Causing a lot of problems for someone", "Troublesome"},
-			{"Annoying and making you lose patience", "Tiresome"},
-			{"Likely to upset someone", "Tasteless"},
-			{"Extremely clean", "Spotless"},
-			{"Attractive because of being unusual and especially old-fashioned", "Quaint"},
-			{"Slightly unpleasant or worrying so that you do not want to get involved in any way", "Off-putting"},
-			{"Neither small nor large in size, amount, degree, or strength", "Moderate"},
+			{"Shabby", "Untidy and in bad condition"},
+			{"Troublesome", "Causing a lot of problems for someone"},
+			{"Tiresome", "Annoying and making you lose patience"},
+			{"Tasteless", "Likely to upset someone"},
+			{"Spotless", "Extremely clean"},
+			{"Quaint", "Attractive because of being unusual and especially old-fashioned"},
+			{"Off-putting", "Slightly unpleasant or worrying so that you do not want to get involved in any way"},
+			{"Moderate", "Neither small nor large in size, amount, degree, or strength"},
 		},
 	})
 
