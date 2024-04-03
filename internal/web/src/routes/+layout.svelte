@@ -21,7 +21,7 @@
 			<Button href="/create">Create deck</Button>
 		</div>
 	</aside>
-	<div class="bg-muted/40 h-screen w-full overflow-auto p-4">
+	<div class="h-screen w-full overflow-auto p-4">
 		{@render children()}
 	</div>
 </div>

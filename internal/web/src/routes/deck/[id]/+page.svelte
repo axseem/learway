@@ -16,6 +16,11 @@
 		page = (page + deck.cards.length - 1) % deck.cards.length;
 		fliped = false;
 	};
+	const swapSides = () => {
+		console.log(deck.cards);
+		deck.cards = deck.cards.map((card) => [card[1], card[0]]);
+		console.log(deck.cards);
+	};
 
 	const copy = (value: string) => {
 		navigator.clipboard.writeText(value).then(() => {
@@ -84,7 +89,9 @@
 					>
 				</Button>
 			</div>
-			<div class="w-full"></div>
+			<div class="flex w-full justify-end">
+				<Button variant="outline" on:click={swapSides}>Swap sides</Button>
+			</div>
 		</div>
 		<details open>
 			<summary class="select-none pb-2 pt-4 text-lg font-medium hover:cursor-pointer"
@@ -93,7 +100,7 @@
 			<ul class="flex flex-col gap-4 pb-12">
 				{#each deck.cards as card, i}
 					<li class="bg-card flex w-full divide-x overflow-hidden rounded-lg border p-6">
-						<p class="w-full p-2">{card[0]}</p>
+						<p class="w-full p-2 pr-8">{card[0]}</p>
 						<p class="w-full p-2 pl-8">{card[1]}</p>
 					</li>
 				{/each}
