@@ -10,4 +10,4 @@ migrate:
 		--url "sqlite://dev.db"
 
 gen: 
-	sqlc generat
+	sqlc generate
