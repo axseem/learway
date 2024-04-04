@@ -7,3 +7,5 @@ sql:
           go:
               package: "database"
               out: "internal/database"
+              rename:
+                  ip: "IP"

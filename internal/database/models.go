@@ -15,3 +15,20 @@ type Deck struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
+
+type Session struct {
+	ID          string
+	UserID      string
+	Fingerprint []byte
+	IP          int64
+	ExpiresAt   time.Time
+	CreatedAt   time.Time
+}
+
+type User struct {
+	ID        string
+	Username  string
+	Email     string
+	Password  string
+	CreatedAt time.Time
+}
