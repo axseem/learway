@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"log"
 
 	"github.com/axseem/learway/internal/database"
 	"github.com/axseem/learway/internal/model"
@@ -19,13 +20,13 @@ func NewDeckService(db *database.Queries) *DeckService {
 	}
 }
 
-func (s DeckService) Get(ctx context.Context, id string) (*model.Deck, error) {
+func (s DeckService) Get(ctx context.Context, id string) (model.Deck, error) {
 	raw, err := s.db.GetDeck(ctx, id)
 	if err != nil {
-		return &model.Deck{}, err
+		return model.Deck{}, err
 	}
 
-	deck := &model.Deck{
+	deck := model.Deck{
 		ID:        raw.ID,
 		Title:     raw.Title,
 		CreatedAt: raw.CreatedAt,
@@ -33,7 +34,7 @@ func (s DeckService) Get(ctx context.Context, id string) (*model.Deck, error) {
 	}
 
 	if err := json.Unmarshal(raw.Cards, &deck.Cards); err != nil {
-		return &model.Deck{}, err
+		return model.Deck{}, err
 	}
 
 	return deck, nil
@@ -65,15 +66,15 @@ func (s DeckService) List(ctx context.Context) ([]model.Deck, error) {
 	return deckList, nil
 }
 
-func (s DeckService) Create(ctx context.Context, arg model.DeckCreateParams) (*model.Deck, error) {
+func (s DeckService) Create(ctx context.Context, arg model.DeckCreateParams) (model.Deck, error) {
 	id, err := gonanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
 	if err != nil {
-		return &model.Deck{}, err
+		log.Fatal(err)
 	}
 
 	cardsJSON, err := json.Marshal(arg.Cards)
 	if err != nil {
-		return &model.Deck{}, err
+		return model.Deck{}, err
 	}
 
 	err = s.db.CreateDeck(ctx, database.CreateDeckParams{
@@ -82,16 +83,16 @@ func (s DeckService) Create(ctx context.Context, arg model.DeckCreateParams) (*m
 		Cards: cardsJSON,
 	})
 	if err != nil {
-		return &model.Deck{}, err
+		return model.Deck{}, err
 	}
 
 	return s.Get(ctx, id)
 }
 
-func (s DeckService) Update(ctx context.Context, id string, arg model.DeckCreateParams) (*model.Deck, error) {
+func (s DeckService) Update(ctx context.Context, id string, arg model.DeckCreateParams) (model.Deck, error) {
 	cardsJSON, err := json.Marshal(arg.Cards)
 	if err != nil {
-		return &model.Deck{}, err
+		return model.Deck{}, err
 	}
 
 	err = s.db.UpdateDeck(ctx, database.UpdateDeckParams{
@@ -100,7 +101,7 @@ func (s DeckService) Update(ctx context.Context, id string, arg model.DeckCreate
 		Cards: cardsJSON,
 	})
 	if err != nil {
-		return &model.Deck{}, err
+		return model.Deck{}, err
 	}
 
 	return s.Get(ctx, id)
