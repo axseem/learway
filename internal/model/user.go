@@ -20,13 +20,13 @@ type UserCreateParams struct {
 }
 
 type UserUpdatePasswordParams struct {
-	Email           string `json:"email"`
+	ID              string `json:"UserID"`
 	CurrentPassword string `json:"currentPassword"`
 	NewPassword     string `json:"newPassword"`
 }
 
 type UserUpdateUsernameParams struct {
-	ID       string `json:"id"`
+	ID       string `json:"userID"`
 	Username string `json:"username"`
 }
 

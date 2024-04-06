@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"net"
 	"time"
 )
 
@@ -9,20 +10,23 @@ type Session struct {
 	ID          string    `json:"id"`
 	UserID      string    `json:"userID"`
 	Fingerprint []byte    `json:"fingerprint"`
-	IP          int64     `json:"ip"`
+	IP          net.IP    `json:"ip"`
 	ExpiresAt   time.Time `json:"expiresAt"`
 	CreatedAt   time.Time `json:"createdAt"`
 }
 
 type SessionCreateParams struct {
-	UserID      string `json:"userID"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
 	Fingerprint []byte `json:"fingerprint"`
-	IP          string `json:"ip"`
+	IP          net.IP `json:"ip"`
 }
 
 type SessionUpdateParams struct {
-	Fingerprint []byte `json:"fingerprint"`
-	IP          string `json:"ip"`
+	ID          string    `json:"id"`
+	Fingerprint []byte    `json:"fingerprint"`
+	IP          net.IP    `json:"ip"`
+	ExpiresAt   time.Time `json:"expiresAt"`
 }
 
 type SessionRepo interface {
