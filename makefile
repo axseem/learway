@@ -1,7 +1,7 @@
 diff:
 	atlas migrate diff $(NAME) \
 		--dir "file://internal/database/migrations" \
-		--to "file://internal/database/schema/schema.sql" \
+		--to "file://internal/database/schema/" \
 		--dev-url "sqlite://dev?mode=memory"
 
 migrate:
