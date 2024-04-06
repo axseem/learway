@@ -5,11 +5,15 @@ import (
 )
 
 type BaseHandeler struct {
-	DeckService model.DeckRepo
+	DeckService    model.DeckRepo
+	UserService    model.UserRepo
+	SessionService model.SessionRepo
 }
 
-func NewBaseHandler(ds model.DeckRepo) *BaseHandeler {
+func NewBaseHandler(d model.DeckRepo, u model.UserRepo, s model.SessionRepo) *BaseHandeler {
 	return &BaseHandeler{
-		DeckService: ds,
+		DeckService:    d,
+		UserService:    u,
+		SessionService: s,
 	}
 }
