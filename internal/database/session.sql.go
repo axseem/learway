@@ -18,7 +18,7 @@ type CreateSessionParams struct {
 	ID          string
 	UserID      string
 	Fingerprint []byte
-	IP          int64
+	IP          []byte
 	ExpiresAt   time.Time
 }
 
@@ -110,7 +110,7 @@ WHERE id = ?
 
 type UpdateSessionParams struct {
 	Fingerprint []byte
-	IP          int64
+	IP          []byte
 	ExpiresAt   time.Time
 	ID          string
 }

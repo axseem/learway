@@ -20,7 +20,7 @@ type Session struct {
 	ID          string
 	UserID      string
 	Fingerprint []byte
-	IP          int64
+	IP          []byte
 	ExpiresAt   time.Time
 	CreatedAt   time.Time
 }
