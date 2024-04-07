@@ -43,7 +43,7 @@ func (s SessionService) GetByUserID(ctx context.Context, id string) ([]model.Ses
 		return []model.Session{}, err
 	}
 
-	sessions := make([]model.Session, len(raw))
+	sessions := make([]model.Session, 0, len(raw))
 	for _, rawSession := range raw {
 		sessions = append(sessions, model.Session{
 			ID:          rawSession.ID,

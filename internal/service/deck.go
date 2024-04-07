@@ -46,7 +46,7 @@ func (s DeckService) List(ctx context.Context) ([]model.Deck, error) {
 		return []model.Deck{}, err
 	}
 
-	deckList := make([]model.Deck, len(rawList))
+	deckList := make([]model.Deck, 0, len(rawList))
 
 	for _, raw := range rawList {
 		deck := model.Deck{
