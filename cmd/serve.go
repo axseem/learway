@@ -5,9 +5,9 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/axseem/learway/internal/api"
-	"github.com/axseem/learway/internal/database"
-	"github.com/axseem/learway/internal/web"
+	"github.com/axseem/learway/api"
+	"github.com/axseem/learway/storage/sqlite"
+	"github.com/axseem/learway/web"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "modernc.org/sqlite"
@@ -23,21 +23,25 @@ func Serve(port string) error {
 		}
 	}
 
-	sqlite, err := sql.Open("sqlite", "./dev.db")
+	sqliteDB, err := sql.Open("sqlite", "./dev.db")
 	if err != nil {
 		return err
 	}
-	defer sqlite.Close()
+	defer sqliteDB.Close()
 
-	db := database.New(sqlite)
+	queries := sqlite.New(sqliteDB)
 
 	e := echo.New()
-	e.Use(middleware.CORS())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowCredentials: true,
+	}))
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Gzip())
 
-	api.API(e, db)
-	web.App(e, db)
+	api.API(e, queries)
+	web.App(e)
 	e.Logger.Fatal(e.Start(":" + port))
 	return nil
 }

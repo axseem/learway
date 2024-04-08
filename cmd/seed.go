@@ -4,20 +4,20 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/axseem/learway/internal/database"
-	"github.com/axseem/learway/internal/model"
-	"github.com/axseem/learway/internal/service"
+	"github.com/axseem/learway/model"
+	"github.com/axseem/learway/service"
+	"github.com/axseem/learway/storage/sqlite"
 	_ "modernc.org/sqlite"
 )
 
 func Seed() error {
-	sqlite, err := sql.Open("sqlite", "./dev.db")
+	sqliteDB, err := sql.Open("sqlite", "./dev.db")
 	if err != nil {
 		return err
 	}
-	defer sqlite.Close()
+	defer sqliteDB.Close()
 
-	s := service.NewDeckService(database.New(sqlite))
+	s := service.NewDeckService(sqlite.New(sqliteDB))
 
 	_, err = s.Create(context.Background(), model.DeckCreateParams{
 		Title: "Words for describing things",

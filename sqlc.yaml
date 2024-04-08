@@ -1,11 +1,16 @@
 version: "2"
 sql:
     - engine: "sqlite"
-      queries: "internal/database/query"
-      schema: "internal/database/schema"
+      queries: "storage/sqlite/query/"
+      schema: "storage/sqlite/schema/"
       gen:
           go:
-              package: "database"
-              out: "internal/database"
+              package: "sqlc"
+              out: "storage/sqlite/sqlc/"
               rename:
                   ip: "IP"
+              overrides:
+                  - column: "session.ip"
+                    go_type:
+                        import: "net"
+                        type: "IP"
