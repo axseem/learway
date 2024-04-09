@@ -13,10 +13,10 @@ type DeckStorage []model.Deck
 func (s DeckStorage) Get(ctx context.Context, id string) (model.Deck, error) {
 	for _, deck := range s {
 		if deck.ID == id {
-			return deck, ErrNotFound
+			return deck, nil
 		}
 	}
-	return model.Deck{}, nil
+	return model.Deck{}, ErrNotFound
 }
 
 func (s DeckStorage) List(ctx context.Context) ([]model.Deck, error) {
