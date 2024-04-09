@@ -1,12 +1,12 @@
 diff:
 	atlas migrate diff $(NAME) \
-		--dir "file://internal/database/migrations" \
-		--to "file://internal/database/schema/" \
+		--dir "file://storage/sqlite/migrations" \
+		--to "file://storage/sqlite/schema/" \
 		--dev-url "sqlite://dev?mode=memory"
 
 migrate:
 	atlas migrate apply \
-		--dir "file://internal/database/migrations" \
+		--dir "file://storage/sqlite/migrations" \
 		--url "sqlite://dev.db"
 
 gen: 
