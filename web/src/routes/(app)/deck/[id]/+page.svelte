@@ -1,25 +1,24 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
-	import type { Deck } from '$lib/types';
 
 	let { data } = $props();
 	let deck = $state(data.deck);
 	let page = $state(0);
+	let flipedByDefaut = $state(false);
 	let fliped = $state(false);
 
 	const flip = () => (fliped = !fliped);
 	const next = () => {
 		page = (page + 1) % deck.cards.length;
-		fliped = false;
+		fliped = flipedByDefaut;
 	};
 	const prev = () => {
 		page = (page + deck.cards.length - 1) % deck.cards.length;
 		fliped = false;
 	};
 	const swapSides = () => {
-		console.log(deck.cards);
-		deck.cards = deck.cards.map((card) => [card[1], card[0]]);
-		console.log(deck.cards);
+		flipedByDefaut = !flipedByDefaut;
+		fliped = flipedByDefaut;
 	};
 
 	const copy = (value: string) => {
@@ -90,7 +89,9 @@
 				</Button>
 			</div>
 			<div class="flex w-full justify-end">
-				<Button variant="outline" on:click={swapSides}>Swap sides</Button>
+				<Button variant="outline" on:click={swapSides}
+					>{flipedByDefaut ? 'back first' : 'front first'}</Button
+				>
 			</div>
 		</div>
 		<details open>

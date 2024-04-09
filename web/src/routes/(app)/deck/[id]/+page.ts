@@ -5,7 +5,7 @@ export const load = async ({ fetch, params }) => {
     let r = await fetch(apiUrl + '/deck/' + params.id, {
         method: 'get'
     });
-    let data: Deck = await r.json();
+    let deck: Deck = await r.json();
 
-    return { deck: data };
+    return { deck: deck };
 };
