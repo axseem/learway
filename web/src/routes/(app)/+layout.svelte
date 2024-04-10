@@ -2,12 +2,13 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
+	let authorized = $state(data.authorized);
 </script>
 
-<div class="flex h-screen bg-background text-foreground">
-	<aside class="flex flex-col h-full border-r w-60 shrink-0">
-		<a class="p-4 font-mono border-b" href="/">learway</a>
+<div class="bg-background text-foreground flex h-screen">
+	<aside class="flex h-full w-64 shrink-0 flex-col border-r">
+		<a class="border-b p-4 font-mono" href="/">learway</a>
 		<div class="px-4 pt-4">
 			<Input placeholder="Search for knowledge" />
 		</div>
@@ -16,12 +17,24 @@
 			<Button variant="ghost" href="/" class="justify-start">Popular</Button>
 			<Button variant="ghost" href="/" class="justify-start">Latest</Button>
 		</div>
-		<div class="flex flex-col gap-2 p-4 mt-auto">
-			<Button variant="secondary" href="/login">Log In</Button>
-			<Button href="/create">Create deck</Button>
+		<div class="mt-auto flex flex-col gap-4 py-4">
+			{#if authorized}
+				<Button variant="secondary" href="/create" class="mx-4">+ Create deck</Button>
+
+				<Button
+					variant="outline"
+					href="/settings"
+					class="mx-4 h-auto justify-start gap-2 rounded-lg border p-2"
+				>
+					<div class="bg-foreground h-8 w-8 rounded-full"></div>
+					@{localStorage.getItem('username')}
+				</Button>
+			{:else}
+				<Button href="/login" class="mx-4 my-2">Log In</Button>
+			{/if}
 		</div>
 	</aside>
-	<div class="w-full h-screen p-4 overflow-auto">
+	<div class="h-screen w-full overflow-auto p-4">
 		{@render children()}
 	</div>
 </div>

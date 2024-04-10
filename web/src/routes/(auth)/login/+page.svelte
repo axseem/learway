@@ -1,33 +1,70 @@
-<script>
+<script lang="ts">
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import type { UserCredentials } from '$lib/types';
+	import { apiUrl } from '$lib/api';
+
+	const login = async (p: UserCredentials) => {
+		let r = await fetch(apiUrl + '/login', {
+			method: 'post',
+			body: JSON.stringify(p)
+		});
+		console.log(JSON.stringify(p));
+
+		if (r.status >= 400 && r.status < 500) {
+			let data = await r.json();
+			alert(data.message);
+			return;
+		}
+
+		if (r.status >= 200 && r.status < 300) {
+			let data = await r.json();
+			let session = data.session;
+			let user = data.user;
+			let expires = new Date(session.expiresAt).toUTCString();
+			document.cookie = `sessionID=${session.id};expires=${expires};path=/;secure`;
+			localStorage.setItem('username', user.username);
+			window.location.replace('/');
+			return;
+		}
+	};
+
+	let credantials: UserCredentials = $state({
+		email: '',
+		password: ''
+	});
 </script>
 
-<div class="flex flex-col w-full gap-2">
+<div class="flex w-full flex-col gap-2">
 	<form
-		class="flex flex-col w-full gap-6 p-6 border rounded-lg shadow-sm bg-card text-card-foreground"
+		class="bg-card text-card-foreground flex w-full flex-col gap-6 rounded-lg border p-6 shadow-sm"
 	>
 		<div class="flex flex-col gap-1.5">
 			<h3 class="text-2xl font-semibold tracking-tight">Welcome</h3>
-			<p class="text-sm text-muted-foreground">Enter your credantials below</p>
+			<p class="text-muted-foreground text-sm">Enter your credantials below</p>
 		</div>
-		<div class="flex flex-col w-full gap-2">
-			<Input placeholder="Email" />
-			<Input placeholder="Password" />
+		<div class="flex w-full flex-col gap-2">
+			<Input bind:value={credantials.email} placeholder="Email" />
+			<Input bind:value={credantials.password} placeholder="Password" />
 		</div>
-		<div class="flex flex-col w-full gap-4">
-			<Button class="w-full">Log In</Button>
+		<div class="flex w-full flex-col gap-4">
+			<Button
+				on:click={() => {
+					login(credantials);
+				}}
+				class="w-full">Log in</Button
+			>
 			<div class="relative">
 				<div class="absolute inset-0 flex items-center"><span class="w-full border-t"></span></div>
 				<div class="relative flex justify-center text-xs uppercase">
-					<span class="px-2 bg-background text-muted-foreground">Or continue with</span>
+					<span class="bg-background text-muted-foreground px-2">Or continue with</span>
 				</div>
 			</div>
 			<Button variant="outline" class="w-full">Continue with Google</Button>
 		</div>
 	</form>
 	<div class="flex place-content-between">
-		<a class="pt-2 text-sm text-muted-foreground" href="/signup">Create an account</a>
-		<a class="pt-2 text-sm text-muted-foreground" href="/recover">Forgot password</a>
+		<a class="text-muted-foreground pt-2 text-sm" href="/signup">Create an account</a>
+		<a class="text-muted-foreground pt-2 text-sm" href="/recover">Forgot password</a>
 	</div>
 </div>

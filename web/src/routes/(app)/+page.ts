@@ -6,7 +6,7 @@ export const load = async ({ fetch }) => {
 		method: 'get'
 	});
 	let data: Array<Deck> = await r.json();
-	data = data.slice(0, 4)
+	data = data?.slice(0, 4)
 
 	return { decks: data };
 };
