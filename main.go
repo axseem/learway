@@ -14,17 +14,24 @@ func main() {
 		Usage: "cli to manage lerway server",
 		Commands: []*cli.Command{
 			{
-				Name:  "serve",
-				Usage: "run srever",
+				Name:  "dev",
+				Usage: "run in development suitable environment",
 				Action: func(ctx *cli.Context) error {
-					return cmd.Serve(ctx.Args().First())
+					return cmd.Dev()
 				},
 			},
 			{
 				Name:  "seed",
-				Usage: "seed database with test data",
+				Usage: "seed database with mock data",
 				Action: func(ctx *cli.Context) error {
 					return cmd.Seed()
+				},
+			},
+			{
+				Name:  "serve",
+				Usage: "run srever in production ready mode",
+				Action: func(ctx *cli.Context) error {
+					return cmd.Dev()
 				},
 			},
 		},

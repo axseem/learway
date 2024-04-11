@@ -3,10 +3,12 @@ package cmd
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/axseem/learway/model"
 	"github.com/axseem/learway/service"
 	"github.com/axseem/learway/storage/sqlite"
+	"github.com/go-playground/validator/v10"
 	_ "modernc.org/sqlite"
 )
 
@@ -17,7 +19,8 @@ func Seed() error {
 	}
 	defer sqliteDB.Close()
 
-	s := service.NewDeckService(sqlite.New(sqliteDB))
+	v := validator.New(validator.WithRequiredStructEnabled())
+	s := service.NewDeckService(sqlite.New(sqliteDB), v)
 
 	_, err = s.Create(context.Background(), model.DeckCreateParams{
 		Title: "Words for describing things",
@@ -33,5 +36,10 @@ func Seed() error {
 		},
 	})
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("database has been seeded")
+	return nil
 }
