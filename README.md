@@ -1,4 +1,4 @@
-![banner](./assets/banner.svg)
+![banner](./assets/banner.webp)
 
 > WIP! Project is still in early stage of development
 
