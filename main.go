@@ -31,7 +31,7 @@ func main() {
 				Name:  "serve",
 				Usage: "run srever in production ready mode",
 				Action: func(ctx *cli.Context) error {
-					return cmd.Dev()
+					return cmd.Serve()
 				},
 			},
 		},
