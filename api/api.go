@@ -2,42 +2,30 @@ package api
 
 import (
 	"github.com/axseem/learway/api/handler"
+	"github.com/axseem/learway/api/router"
 	"github.com/axseem/learway/middleware"
 	"github.com/axseem/learway/service"
 	"github.com/axseem/learway/storage"
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
 
-type BaseValidator struct {
-	Validator *validator.Validate
-}
-
-func (bv *BaseValidator) Validate(i interface{}) error {
-	return bv.Validator.Struct(i)
-}
-
 func API(e *echo.Echo, queries *storage.Queries) {
-	g := e.Group("/api")
+	api := e.Group("/api")
+	apiAuth := api.Group("", middleware.Authorized(queries.Session))
 
-	e.Validator = &BaseValidator{Validator: validator.New()}
+	v := validator.New(validator.WithRequiredStructEnabled())
 
-	h := handler.NewBaseHandler(
-		service.NewDeckService(queries),
-		service.NewUserService(queries),
-		service.NewSessionService(queries),
-	)
+	deckService := service.NewDeckService(queries, v)
+	userService := service.NewUserService(queries, v)
+	sessionService := service.NewSessionService(queries, v)
+	authService := service.NewAuthService(userService, sessionService, v)
 
-	session := middleware.NewSessionMiddlware(queries.Session)
+	deckHandler := handler.NewDeckHandler(deckService)
+	userHandler := handler.NewUserHandler(userService)
+	authHandler := handler.NewAuthHandler(authService)
 
-	a := g.Group("")
-	a.Use(session.Authorized)
-
-	g.GET("/decks", h.ListDecks)
-	g.GET("/deck/:id", h.GetDeck)
-	a.PUT("/deck/:id", h.UpdateDeck)
-	a.DELETE("/deck/:id", h.DeleteDeck)
-	a.POST("/deck", h.CreateDeck)
-	g.POST("/signup", h.SignUp)
-	g.POST("/login", h.LogIn)
+	router.Deck(api, apiAuth, deckHandler)
+	router.User(api, userHandler)
+	router.Auth(api, authHandler)
 }
