@@ -6,8 +6,8 @@
 	let authorized = $state(data.authorized);
 </script>
 
-<div class="bg-background text-foreground flex h-screen">
-	<aside class="flex h-full w-64 shrink-0 flex-col border-r">
+<div class="bg-background text-foreground flex h-screen ring-1">
+	<aside class="flex h-full w-64 shrink-0 flex-col border-r border-t">
 		<a class="border-b p-4 font-mono" href="/">learway</a>
 		<div class="px-4 pt-4">
 			<Input placeholder="Search for knowledge" />
@@ -30,11 +30,11 @@
 					@{localStorage.getItem('username')}
 				</Button>
 			{:else}
-				<Button href="/login" class="mx-4 my-2">Log In</Button>
+				<Button href="/login" class="mx-4">Log In</Button>
 			{/if}
 		</div>
 	</aside>
-	<div class="h-screen w-full overflow-auto p-4">
+	<div class="h-screen w-full overflow-auto border-t p-4">
 		{@render children()}
 	</div>
 </div>

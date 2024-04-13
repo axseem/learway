@@ -7,9 +7,11 @@
 	const login = async (p: UserCredentials) => {
 		let r = await fetch(apiUrl + '/login', {
 			method: 'post',
-			body: JSON.stringify(p)
+			body: JSON.stringify(p),
+			headers: {
+				'Content-Type': 'application/json'
+			}
 		});
-		console.log(JSON.stringify(p));
 
 		if (r.status >= 400 && r.status < 500) {
 			let data = await r.json();
@@ -20,10 +22,10 @@
 		if (r.status >= 200 && r.status < 300) {
 			let data = await r.json();
 			let session = data.session;
-			let user = data.user;
+			let username = data.username;
 			let expires = new Date(session.expiresAt).toUTCString();
-			document.cookie = `sessionID=${session.id};expires=${expires};path=/;secure`;
-			localStorage.setItem('username', user.username);
+			document.cookie = `sessionID=${session.id}; expires=${expires}; path=/; secure=true;`;
+			localStorage.setItem('username', username);
 			window.location.replace('/');
 			return;
 		}
@@ -38,6 +40,9 @@
 <div class="flex w-full flex-col gap-2">
 	<form
 		class="bg-card text-card-foreground flex w-full flex-col gap-6 rounded-lg border p-6 shadow-sm"
+		on:submit={() => {
+			login(credantials);
+		}}
 	>
 		<div class="flex flex-col gap-1.5">
 			<h3 class="text-2xl font-semibold tracking-tight">Welcome</h3>
@@ -48,12 +53,7 @@
 			<Input bind:value={credantials.password} placeholder="Password" />
 		</div>
 		<div class="flex w-full flex-col gap-4">
-			<Button
-				on:click={() => {
-					login(credantials);
-				}}
-				class="w-full">Log in</Button
-			>
+			<Button type="submit" class="w-full">Log in</Button>
 			<div class="relative">
 				<div class="absolute inset-0 flex items-center"><span class="w-full border-t"></span></div>
 				<div class="relative flex justify-center text-xs uppercase">

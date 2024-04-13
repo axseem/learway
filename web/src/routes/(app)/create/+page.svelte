@@ -12,7 +12,10 @@
 		await fetch(apiUrl + '/deck', {
 			method: 'POST',
 			credentials: 'include',
-			body: JSON.stringify(body)
+			body: JSON.stringify(body),
+			headers: {
+				'Content-Type': 'application/json'
+			}
 		}).then((r) => {
 			if (r.status >= 400 && r.status < 500) {
 				r.json().then((data) => alert(data.message));
@@ -31,7 +34,7 @@
 	});
 </script>
 
-<div class="flex justify-center w-full h-full">
+<div class="flex h-full w-full justify-center">
 	<div class="flex w-full max-w-[40rem] flex-col gap-4 pt-6">
 		<div class="pb-2">
 			<h1 class="text-2xl font-medium">Create new deck</h1>
@@ -54,12 +57,12 @@
 					<textarea
 						bind:value={deck.cards[i][0]}
 						placeholder="Content for the front..."
-						class="w-full p-8 border rounded-l-lg resize-none bg-card"
+						class="bg-card w-full resize-none rounded-l-lg border p-8"
 					/>
 					<textarea
 						bind:value={deck.cards[i][1]}
 						placeholder="Content for the back..."
-						class="w-full p-8 border-r rounded-r-lg resize-none bg-card border-y"
+						class="bg-card w-full resize-none rounded-r-lg border-y border-r p-8"
 					/>
 				</li>
 			</div>

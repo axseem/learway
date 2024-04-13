@@ -3,8 +3,10 @@ package web
 import (
 	"embed"
 	"io/fs"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 //go:embed all:build
@@ -15,5 +17,8 @@ func buildFS() fs.FS {
 }
 
 func App(e *echo.Echo) {
-	e.StaticFS("/", buildFS())
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		Filesystem: http.FS(buildFS()),
+		HTML5:      true,
+	}))
 }
