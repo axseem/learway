@@ -6,28 +6,35 @@ import (
 
 	"github.com/axseem/learway/model"
 	"github.com/axseem/learway/storage"
+	"github.com/go-playground/validator/v10"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
-type DeckService struct {
-	storage *storage.Queries
+type Deck struct {
+	storage   *storage.Queries
+	validator *validator.Validate
 }
 
-func NewDeckService(store *storage.Queries) *DeckService {
-	return &DeckService{
-		storage: store,
+func NewDeckService(storage *storage.Queries, validator *validator.Validate) *Deck {
+	return &Deck{
+		storage:   storage,
+		validator: validator,
 	}
 }
 
-func (s DeckService) Get(ctx context.Context, id string) (model.Deck, error) {
+func (s Deck) Get(ctx context.Context, id string) (model.Deck, error) {
 	return s.storage.Deck.Get(ctx, id)
 }
 
-func (s DeckService) List(ctx context.Context) ([]model.Deck, error) {
+func (s Deck) List(ctx context.Context) ([]model.Deck, error) {
 	return s.storage.Deck.List(ctx)
 }
 
-func (s DeckService) Create(ctx context.Context, arg model.DeckCreateParams) (model.Deck, error) {
+func (s Deck) Create(ctx context.Context, arg model.DeckCreateParams) (model.Deck, error) {
+	if err := s.validator.Struct(arg); err != nil {
+		return model.Deck{}, err
+	}
+
 	id, err := gonanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
 	if err != nil {
 		log.Fatal(err)
@@ -46,12 +53,12 @@ func (s DeckService) Create(ctx context.Context, arg model.DeckCreateParams) (mo
 	return s.storage.Deck.Get(ctx, id)
 }
 
-func (s DeckService) Update(ctx context.Context, id string, arg model.DeckCreateParams) (model.Deck, error) {
-	err := s.storage.Deck.Update(ctx, storage.DeckCreateParams{
-		ID:    id,
-		Title: arg.Title,
-		Cards: arg.Cards,
-	})
+func (s Deck) Update(ctx context.Context, id string, arg model.DeckCreateParams) (model.Deck, error) {
+	if err := s.validator.Struct(arg); err != nil {
+		return model.Deck{}, err
+	}
+
+	err := s.storage.Deck.Update(ctx, id, storage.DeckUpdateParams(arg))
 	if err != nil {
 		return model.Deck{}, err
 	}
@@ -59,6 +66,6 @@ func (s DeckService) Update(ctx context.Context, id string, arg model.DeckCreate
 	return s.Get(ctx, id)
 }
 
-func (s DeckService) Delete(ctx context.Context, id string) error {
+func (s Deck) Delete(ctx context.Context, id string) error {
 	return s.storage.Deck.Delete(ctx, id)
 }
