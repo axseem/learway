@@ -51,9 +51,9 @@ func (s *SessionStorage) Create(ctx context.Context, arg storage.SessionCreatePa
 	return nil
 }
 
-func (s *SessionStorage) Update(ctx context.Context, arg storage.SessionUpdateParams) error {
+func (s *SessionStorage) Update(ctx context.Context, id string, arg storage.SessionUpdateParams) error {
 	for i, session := range *s {
-		if session.ID == arg.ID {
+		if session.ID == id {
 			(*s)[i].Fingerprint = arg.Fingerprint
 			(*s)[i].IP = arg.IP
 			(*s)[i].ExpiresAt = arg.ExpiresAt

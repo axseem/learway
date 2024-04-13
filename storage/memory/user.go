@@ -49,20 +49,20 @@ func (s *UserStorage) Create(ctx context.Context, arg storage.UserCreateParams) 
 	return nil
 }
 
-func (s *UserStorage) UpdatePassword(ctx context.Context, arg storage.UserUpdatePasswordParams) error {
+func (s *UserStorage) UpdatePassword(ctx context.Context, id string, password []byte) error {
 	for i, user := range *s {
-		if user.ID == arg.ID {
-			(*s)[i].Password = arg.Password
+		if user.ID == id {
+			(*s)[i].Password = password
 			return nil
 		}
 	}
 	return ErrNotFound
 }
 
-func (s *UserStorage) UpdateUsername(ctx context.Context, arg storage.UserUpdateUsernameParams) error {
+func (s *UserStorage) UpdateUsername(ctx context.Context, id, username string) error {
 	for i, user := range *s {
-		if user.ID == arg.ID {
-			(*s)[i].Username = arg.Username
+		if user.ID == id {
+			(*s)[i].Username = username
 			return nil
 		}
 	}

@@ -6,9 +6,11 @@ import (
 )
 
 func New(db sqlc.DBTX) *storage.Queries {
+	queries := sqlc.New(db)
+
 	return &storage.Queries{
-		Deck:    NewDeckStorage(db),
-		Session: NewSessionStorage(db),
-		User:    NewUserStorage(db),
+		Deck:    NewDeckStorage(queries),
+		Session: NewSessionStorage(queries),
+		User:    NewUserStorage(queries),
 	}
 }

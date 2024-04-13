@@ -1,7 +1,7 @@
 package storage
 
 type Queries struct {
-	Deck    DeckQueries
-	Session SessionQueries
-	User    UserQueries
+	Deck    DeckRepo
+	Session SessionRepo
+	User    UserRepo
 }

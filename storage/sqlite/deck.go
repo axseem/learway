@@ -13,8 +13,8 @@ type DeckStorage struct {
 	queries *sqlc.Queries
 }
 
-func NewDeckStorage(db sqlc.DBTX) *DeckStorage {
-	return &DeckStorage{queries: sqlc.New(db)}
+func NewDeckStorage(queries *sqlc.Queries) *DeckStorage {
+	return &DeckStorage{queries: queries}
 }
 
 func (s DeckStorage) Get(ctx context.Context, id string) (model.Deck, error) {
@@ -75,14 +75,14 @@ func (s *DeckStorage) Create(ctx context.Context, arg storage.DeckCreateParams) 
 	})
 }
 
-func (s *DeckStorage) Update(ctx context.Context, arg storage.DeckCreateParams) error {
+func (s *DeckStorage) Update(ctx context.Context, id string, arg storage.DeckUpdateParams) error {
 	cardsJSON, err := json.Marshal(arg.Cards)
 	if err != nil {
 		return err
 	}
 
 	return s.queries.UpdateDeck(ctx, sqlc.UpdateDeckParams{
-		ID:    arg.ID,
+		ID:    id,
 		Title: arg.Title,
 		Cards: cardsJSON,
 	})

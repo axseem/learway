@@ -12,8 +12,8 @@ type SessionStorage struct {
 	queries *sqlc.Queries
 }
 
-func NewSessionStorage(db sqlc.DBTX) *SessionStorage {
-	return &SessionStorage{queries: sqlc.New(db)}
+func NewSessionStorage(queries *sqlc.Queries) *SessionStorage {
+	return &SessionStorage{queries: queries}
 }
 
 func (s *SessionStorage) GetByID(ctx context.Context, id string) (model.Session, error) {
@@ -39,8 +39,13 @@ func (s *SessionStorage) Create(ctx context.Context, arg storage.SessionCreatePa
 	return s.queries.CreateSession(ctx, sqlc.CreateSessionParams(arg))
 }
 
-func (s *SessionStorage) Update(ctx context.Context, arg storage.SessionUpdateParams) error {
-	return s.queries.UpdateSession(ctx, sqlc.UpdateSessionParams(arg))
+func (s *SessionStorage) Update(ctx context.Context, id string, arg storage.SessionUpdateParams) error {
+	return s.queries.UpdateSession(ctx, sqlc.UpdateSessionParams{
+		ID:          id,
+		Fingerprint: arg.Fingerprint,
+		IP:          arg.IP,
+		ExpiresAt:   arg.ExpiresAt,
+	})
 }
 
 func (s *SessionStorage) Delete(ctx context.Context, id string) error {

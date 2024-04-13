@@ -35,9 +35,9 @@ func (s *DeckStorage) Create(ctx context.Context, arg storage.DeckCreateParams) 
 	return nil
 }
 
-func (s *DeckStorage) Update(ctx context.Context, arg storage.DeckCreateParams) error {
+func (s *DeckStorage) Update(ctx context.Context, id string, arg storage.DeckUpdateParams) error {
 	for i, deck := range *s {
-		if deck.ID == arg.ID {
+		if deck.ID == id {
 			(*s)[i].Title = arg.Title
 			(*s)[i].Cards = arg.Cards
 			return nil

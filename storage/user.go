@@ -13,22 +13,12 @@ type UserCreateParams struct {
 	Password []byte
 }
 
-type UserUpdatePasswordParams struct {
-	Password []byte
-	ID       string
-}
-
-type UserUpdateUsernameParams struct {
-	Username string
-	ID       string
-}
-
-type UserQueries interface {
+type UserRepo interface {
 	GetByID(ctx context.Context, id string) (model.User, error)
 	GetByEmail(ctx context.Context, email string) (model.User, error)
 	GetByUsername(ctx context.Context, username string) (model.User, error)
 	Create(ctx context.Context, arg UserCreateParams) error
-	UpdatePassword(ctx context.Context, arg UserUpdatePasswordParams) error
-	UpdateUsername(ctx context.Context, arg UserUpdateUsernameParams) error
+	UpdatePassword(ctx context.Context, id string, password []byte) error
+	UpdateUsername(ctx context.Context, id, username string) error
 	Delete(ctx context.Context, id string) error
 }

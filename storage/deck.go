@@ -9,13 +9,18 @@ import (
 type DeckCreateParams struct {
 	ID    string
 	Title string
-	Cards [][2]string
+	Cards model.Cards
 }
 
-type DeckQueries interface {
+type DeckUpdateParams struct {
+	Title string
+	Cards model.Cards
+}
+
+type DeckRepo interface {
 	Get(ctx context.Context, id string) (model.Deck, error)
 	List(ctx context.Context) ([]model.Deck, error)
 	Create(ctx context.Context, arg DeckCreateParams) error
-	Update(ctx context.Context, arg DeckCreateParams) error
+	Update(ctx context.Context, id string, arg DeckUpdateParams) error
 	Delete(ctx context.Context, id string) error
 }

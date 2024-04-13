@@ -12,8 +12,8 @@ type UserStorage struct {
 	queries *sqlc.Queries
 }
 
-func NewUserStorage(db sqlc.DBTX) *UserStorage {
-	return &UserStorage{queries: sqlc.New(db)}
+func NewUserStorage(queries *sqlc.Queries) *UserStorage {
+	return &UserStorage{queries: queries}
 }
 
 func (s UserStorage) GetByID(ctx context.Context, id string) (model.User, error) {
@@ -35,12 +35,18 @@ func (s *UserStorage) Create(ctx context.Context, arg storage.UserCreateParams) 
 	return s.queries.CreateUser(ctx, sqlc.CreateUserParams(arg))
 }
 
-func (s *UserStorage) UpdatePassword(ctx context.Context, arg storage.UserUpdatePasswordParams) error {
-	return s.queries.UpdateUserPassword(ctx, sqlc.UpdateUserPasswordParams(arg))
+func (s *UserStorage) UpdatePassword(ctx context.Context, id string, password []byte) error {
+	return s.queries.UpdateUserPassword(ctx, sqlc.UpdateUserPasswordParams{
+		Password: password,
+		ID:       id,
+	})
 }
 
-func (s *UserStorage) UpdateUsername(ctx context.Context, arg storage.UserUpdateUsernameParams) error {
-	return s.queries.UpdateUserUsername(ctx, sqlc.UpdateUserUsernameParams(arg))
+func (s *UserStorage) UpdateUsername(ctx context.Context, id, username string) error {
+	return s.queries.UpdateUserUsername(ctx, sqlc.UpdateUserUsernameParams{
+		Username: username,
+		ID:       id,
+	})
 }
 
 func (s *UserStorage) Delete(ctx context.Context, id string) error {
