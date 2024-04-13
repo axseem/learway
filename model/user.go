@@ -14,20 +14,18 @@ type User struct {
 }
 
 type UserCreateParams struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	Username string `json:"username" validate:"required,alphanum,gt=0,lte=64"`
+	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password"`
 }
 
 type UserUpdatePasswordParams struct {
-	ID              string `json:"UserID"`
 	CurrentPassword string `json:"currentPassword"`
 	NewPassword     string `json:"newPassword"`
 }
 
-type UserUpdateUsernameParams struct {
-	ID       string `json:"userID"`
-	Username string `json:"username"`
+type UsernameUpdateParams struct {
+	Username string `json:"username" validate:"required,alphanum,gt=0,lte=64"`
 }
 
 type UserRepo interface {
@@ -35,7 +33,7 @@ type UserRepo interface {
 	GetByUsername(ctx context.Context, username string) (User, error)
 	GetByEmail(ctx context.Context, email string) (User, error)
 	Create(ctx context.Context, arg UserCreateParams) (User, error)
-	UpdatePassword(ctx context.Context, arg UserUpdatePasswordParams) (User, error)
-	UpdateUsername(ctx context.Context, arg UserUpdateUsernameParams) (User, error)
+	UpdatePassword(ctx context.Context, id string, arg UserUpdatePasswordParams) (User, error)
+	UpdateUsername(ctx context.Context, id string, arg UsernameUpdateParams) (User, error)
 	Delete(ctx context.Context, id string) error
 }
