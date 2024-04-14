@@ -69,6 +69,18 @@ func (s *UserStorage) UpdateUsername(ctx context.Context, id, username string) e
 	return ErrNotFound
 }
 
+func (s *UserStorage) UpdateProfile(ctx context.Context, id string, arg model.UserUpdateProfileParams) error {
+	for i, user := range *s {
+		if user.ID == id {
+			(*s)[i].Name = arg.Name
+			(*s)[i].Description = arg.Description
+			(*s)[i].Picture = arg.Picture
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
 func (s *UserStorage) Delete(ctx context.Context, id string) error {
 	for i, user := range *s {
 		if user.ID == id {

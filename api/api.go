@@ -22,7 +22,7 @@ func API(e *echo.Echo, queries *storage.Queries) {
 	authService := service.NewAuthService(userService, sessionService, v)
 
 	deckHandler := handler.NewDeckHandler(deckService)
-	userHandler := handler.NewUserHandler(userService)
+	userHandler := handler.NewUserHandler(userService, deckService)
 	authHandler := handler.NewAuthHandler(authService)
 
 	router.Deck(api, apiAuth, deckHandler)

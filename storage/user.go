@@ -11,14 +11,16 @@ type UserCreateParams struct {
 	Username string
 	Email    string
 	Password []byte
+	Name     string
 }
 
 type UserRepo interface {
 	GetByID(ctx context.Context, id string) (model.User, error)
-	GetByEmail(ctx context.Context, email string) (model.User, error)
 	GetByUsername(ctx context.Context, username string) (model.User, error)
+	GetByEmail(ctx context.Context, email string) (model.User, error)
 	Create(ctx context.Context, arg UserCreateParams) error
 	UpdatePassword(ctx context.Context, id string, password []byte) error
 	UpdateUsername(ctx context.Context, id, username string) error
+	UpdateProfile(ctx context.Context, id string, arg model.UserUpdateProfileParams) error
 	Delete(ctx context.Context, id string) error
 }

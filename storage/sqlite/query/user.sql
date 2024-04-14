@@ -17,7 +17,7 @@ WHERE email = ?
 LIMIT 1;
 
 -- name: CreateUser :exec
-INSERT INTO user (id, username, email, password) VALUES (?, ?, ?, ?);
+INSERT INTO user (id, username, email, password, name) VALUES (?, ?, ?, ?, ?);
 
 -- name: UpdateUserPassword :exec
 UPDATE user
@@ -27,6 +27,11 @@ WHERE id = ?;
 -- name: UpdateUserUsername :exec
 UPDATE user
 SET username = ?
+WHERE id = ?;
+
+-- name: UpdateUserProfile :exec
+UPDATE user
+SET name = ?, description = ?, picture = ?
 WHERE id = ?;
 
 -- name: DeleteUser :exec

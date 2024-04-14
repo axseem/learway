@@ -52,7 +52,7 @@ func (s Session) Create(ctx context.Context, arg model.SessionCreateParams) (mod
 }
 
 func (s Session) Update(ctx context.Context, id string, arg model.SessionUpdateParams) (model.Session, error) {
-	if err := s.storage.Session.Update(ctx, id, storage.SessionUpdateParams(arg)); err != nil {
+	if err := s.storage.Session.Update(ctx, id, arg); err != nil {
 		return model.Session{}, err
 	}
 

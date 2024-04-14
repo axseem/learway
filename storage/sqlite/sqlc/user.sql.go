@@ -7,10 +7,11 @@ package sqlc
 
 import (
 	"context"
+	"database/sql"
 )
 
 const createUser = `-- name: CreateUser :exec
-INSERT INTO user (id, username, email, password) VALUES (?, ?, ?, ?)
+INSERT INTO user (id, username, email, password, name) VALUES (?, ?, ?, ?, ?)
 `
 
 type CreateUserParams struct {
@@ -18,6 +19,7 @@ type CreateUserParams struct {
 	Username string
 	Email    string
 	Password []byte
+	Name     string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
@@ -26,6 +28,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 		arg.Username,
 		arg.Email,
 		arg.Password,
+		arg.Name,
 	)
 	return err
 }
@@ -42,7 +45,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) error {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, username, email, password, created_at
+SELECT id, username, email, password, name, description, picture, created_at
 FROM user
 WHERE email = ?
 LIMIT 1
@@ -56,13 +59,16 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.Username,
 		&i.Email,
 		&i.Password,
+		&i.Name,
+		&i.Description,
+		&i.Picture,
 		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, username, email, password, created_at
+SELECT id, username, email, password, name, description, picture, created_at
 FROM user
 WHERE id = ?
 LIMIT 1
@@ -76,13 +82,16 @@ func (q *Queries) GetUserByID(ctx context.Context, id string) (User, error) {
 		&i.Username,
 		&i.Email,
 		&i.Password,
+		&i.Name,
+		&i.Description,
+		&i.Picture,
 		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT id, username, email, password, created_at
+SELECT id, username, email, password, name, description, picture, created_at
 FROM user
 WHERE username = ?
 LIMIT 1
@@ -96,6 +105,9 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 		&i.Username,
 		&i.Email,
 		&i.Password,
+		&i.Name,
+		&i.Description,
+		&i.Picture,
 		&i.CreatedAt,
 	)
 	return i, err
@@ -114,6 +126,29 @@ type UpdateUserPasswordParams struct {
 
 func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
 	_, err := q.db.ExecContext(ctx, updateUserPassword, arg.Password, arg.ID)
+	return err
+}
+
+const updateUserProfile = `-- name: UpdateUserProfile :exec
+UPDATE user
+SET name = ?, description = ?, picture = ?
+WHERE id = ?
+`
+
+type UpdateUserProfileParams struct {
+	Name        string
+	Description sql.NullString
+	Picture     sql.NullString
+	ID          string
+}
+
+func (q *Queries) UpdateUserProfile(ctx context.Context, arg UpdateUserProfileParams) error {
+	_, err := q.db.ExecContext(ctx, updateUserProfile,
+		arg.Name,
+		arg.Description,
+		arg.Picture,
+		arg.ID,
+	)
 	return err
 }
 

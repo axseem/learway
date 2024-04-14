@@ -7,17 +7,19 @@ package sqlc
 
 import (
 	"context"
+	"database/sql"
 )
 
 const createDeck = `-- name: CreateDeck :exec
-INSERT INTO deck (id, user_id, title, cards) VALUES (?, ?, ?, ?)
+INSERT INTO deck (id, user_id, title, cards, subject) VALUES (?, ?, ?, ?, ?)
 `
 
 type CreateDeckParams struct {
-	ID     string
-	UserID string
-	Title  string
-	Cards  []byte
+	ID      string
+	UserID  string
+	Title   string
+	Cards   []byte
+	Subject sql.NullString
 }
 
 func (q *Queries) CreateDeck(ctx context.Context, arg CreateDeckParams) error {
@@ -26,6 +28,7 @@ func (q *Queries) CreateDeck(ctx context.Context, arg CreateDeckParams) error {
 		arg.UserID,
 		arg.Title,
 		arg.Cards,
+		arg.Subject,
 	)
 	return err
 }
@@ -42,7 +45,7 @@ func (q *Queries) DeleteDeck(ctx context.Context, id string) error {
 }
 
 const getDeck = `-- name: GetDeck :one
-SELECT id, user_id, title, cards, created_at, updated_at
+SELECT id, user_id, title, cards, subject, created_at, updated_at
 FROM deck
 WHERE id = ?
 LIMIT 1
@@ -56,14 +59,53 @@ func (q *Queries) GetDeck(ctx context.Context, id string) (Deck, error) {
 		&i.UserID,
 		&i.Title,
 		&i.Cards,
+		&i.Subject,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
 }
 
+const getDeckByUserID = `-- name: GetDeckByUserID :many
+SELECT id, user_id, title, cards, subject, created_at, updated_at
+FROM deck
+WHERE user_id = ?
+ORDER BY created_at DESC
+`
+
+func (q *Queries) GetDeckByUserID(ctx context.Context, userID string) ([]Deck, error) {
+	rows, err := q.db.QueryContext(ctx, getDeckByUserID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Deck
+	for rows.Next() {
+		var i Deck
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Cards,
+			&i.Subject,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listDecks = `-- name: ListDecks :many
-SELECT id, user_id, title, cards, created_at, updated_at
+SELECT id, user_id, title, cards, subject, created_at, updated_at
 FROM deck
 ORDER BY created_at DESC
 `
@@ -82,6 +124,7 @@ func (q *Queries) ListDecks(ctx context.Context) ([]Deck, error) {
 			&i.UserID,
 			&i.Title,
 			&i.Cards,
+			&i.Subject,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -100,17 +143,23 @@ func (q *Queries) ListDecks(ctx context.Context) ([]Deck, error) {
 
 const updateDeck = `-- name: UpdateDeck :exec
 UPDATE deck
-SET title = ?, cards = ?, updated_at = CURRENT_TIMESTAMP
+SET title = ?, cards = ?, subject = ?, updated_at = CURRENT_TIMESTAMP
 WHERE id = ?
 `
 
 type UpdateDeckParams struct {
-	Title string
-	Cards []byte
-	ID    string
+	Title   string
+	Cards   []byte
+	Subject sql.NullString
+	ID      string
 }
 
 func (q *Queries) UpdateDeck(ctx context.Context, arg UpdateDeckParams) error {
-	_, err := q.db.ExecContext(ctx, updateDeck, arg.Title, arg.Cards, arg.ID)
+	_, err := q.db.ExecContext(ctx, updateDeck,
+		arg.Title,
+		arg.Cards,
+		arg.Subject,
+		arg.ID,
+	)
 	return err
 }

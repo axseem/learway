@@ -7,4 +7,5 @@ import (
 
 func User(api *echo.Group, h *handler.UserHandler) {
 	api.GET("/user/:username", h.Get)
+	api.GET("/user/:username/decks", h.GetDecks)
 }

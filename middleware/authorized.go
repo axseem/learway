@@ -4,6 +4,7 @@ import (
 	"net"
 	"time"
 
+	"github.com/axseem/learway/model"
 	"github.com/axseem/learway/storage"
 	"github.com/labstack/echo/v4"
 )
@@ -31,7 +32,7 @@ func Authorized(sessionStorage storage.SessionRepo) echo.MiddlewareFunc {
 				return echo.NewHTTPError(code, message)
 			}
 
-			sessionUpdateParams := storage.SessionUpdateParams{
+			sessionUpdateParams := model.SessionUpdateParams{
 				Fingerprint: []byte(c.Request().UserAgent()),
 				IP:          net.IP(c.RealIP()),
 				ExpiresAt:   time.Now().Add(time.Hour * 24 * 7),

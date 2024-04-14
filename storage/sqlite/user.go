@@ -18,17 +18,17 @@ func NewUserStorage(queries *sqlc.Queries) *UserStorage {
 
 func (s UserStorage) GetByID(ctx context.Context, id string) (model.User, error) {
 	sqlcUser, err := s.queries.GetUserByID(ctx, id)
-	return model.User(sqlcUser), err
+	return convertUser(sqlcUser), err
 }
 
 func (s UserStorage) GetByEmail(ctx context.Context, email string) (model.User, error) {
 	sqlcUser, err := s.queries.GetUserByEmail(ctx, email)
-	return model.User(sqlcUser), err
+	return convertUser(sqlcUser), err
 }
 
 func (s UserStorage) GetByUsername(ctx context.Context, username string) (model.User, error) {
 	sqlcUser, err := s.queries.GetUserByUsername(ctx, username)
-	return model.User(sqlcUser), err
+	return convertUser(sqlcUser), err
 }
 
 func (s *UserStorage) Create(ctx context.Context, arg storage.UserCreateParams) error {
@@ -49,6 +49,27 @@ func (s *UserStorage) UpdateUsername(ctx context.Context, id, username string) e
 	})
 }
 
+func (s *UserStorage) UpdateProfile(ctx context.Context, id string, arg model.UserUpdateProfileParams) error {
+	return s.queries.UpdateUserProfile(ctx, sqlc.UpdateUserProfileParams{
+		Name:        arg.Name,
+		Description: toNullString(arg.Description),
+		Picture:     toNullString(arg.Picture),
+		ID:          id,
+	})
+}
+
 func (s *UserStorage) Delete(ctx context.Context, id string) error {
 	return s.queries.DeleteUser(ctx, id)
+}
+
+func convertUser(sqlcUser sqlc.User) model.User {
+	return model.User{
+		ID:          sqlcUser.ID,
+		Username:    sqlcUser.Username,
+		Email:       sqlcUser.Email,
+		Password:    sqlcUser.Password,
+		Name:        sqlcUser.Name,
+		Description: sqlcUser.Description.String,
+		Picture:     sqlcUser.Picture.String,
+	}
 }

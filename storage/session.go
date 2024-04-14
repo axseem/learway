@@ -16,16 +16,10 @@ type SessionCreateParams struct {
 	ExpiresAt   time.Time
 }
 
-type SessionUpdateParams struct {
-	Fingerprint []byte
-	IP          net.IP
-	ExpiresAt   time.Time
-}
-
 type SessionRepo interface {
 	GetByID(ctx context.Context, id string) (model.Session, error)
 	GetByUserID(ctx context.Context, userID string) ([]model.Session, error)
 	Create(ctx context.Context, arg SessionCreateParams) error
-	Update(ctx context.Context, id string, arg SessionUpdateParams) error
+	Update(ctx context.Context, id string, arg model.SessionUpdateParams) error
 	Delete(ctx context.Context, id string) error
 }

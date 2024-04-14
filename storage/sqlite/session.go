@@ -39,7 +39,7 @@ func (s *SessionStorage) Create(ctx context.Context, arg storage.SessionCreatePa
 	return s.queries.CreateSession(ctx, sqlc.CreateSessionParams(arg))
 }
 
-func (s *SessionStorage) Update(ctx context.Context, id string, arg storage.SessionUpdateParams) error {
+func (s *SessionStorage) Update(ctx context.Context, id string, arg model.SessionUpdateParams) error {
 	return s.queries.UpdateSession(ctx, sqlc.UpdateSessionParams{
 		ID:          id,
 		Fingerprint: arg.Fingerprint,

@@ -106,6 +106,18 @@ func (s User) UpdateUsername(ctx context.Context, id string, arg model.UsernameU
 	return s.GetByID(ctx, id)
 }
 
+func (s User) UpdateProfile(ctx context.Context, id string, arg model.UserUpdateProfileParams) (model.User, error) {
+	if err := s.validator.Struct(arg); err != nil {
+		return model.User{}, err
+	}
+
+	if err := s.storage.User.UpdateProfile(ctx, id, arg); err != nil {
+		return model.User{}, err
+	}
+
+	return s.GetByID(ctx, id)
+}
+
 func (s User) Delete(ctx context.Context, id string) error {
 	return s.storage.Deck.Delete(ctx, id)
 }

@@ -19,6 +19,22 @@ func (s DeckStorage) Get(ctx context.Context, id string) (model.Deck, error) {
 	return model.Deck{}, ErrNotFound
 }
 
+func (s DeckStorage) GetByUserID(ctx context.Context, userID string) ([]model.Deck, error) {
+	var decks []model.Deck
+
+	for _, deck := range s {
+		if deck.UserID == userID {
+			decks = append(decks, deck)
+		}
+	}
+
+	if len(decks) == 0 {
+		return nil, ErrNotFound
+	}
+
+	return decks, nil
+}
+
 func (s DeckStorage) List(ctx context.Context) ([]model.Deck, error) {
 	return s, nil
 }

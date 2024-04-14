@@ -23,19 +23,26 @@ func (s DeckStorage) Get(ctx context.Context, id string) (model.Deck, error) {
 		return model.Deck{}, err
 	}
 
-	modelDeck := model.Deck{
-		ID:        sqlcDeck.ID,
-		UserID:    sqlcDeck.UserID,
-		Title:     sqlcDeck.Title,
-		CreatedAt: sqlcDeck.CreatedAt,
-		UpdatedAt: sqlcDeck.UpdatedAt,
+	return convertDeck(sqlcDeck)
+}
+
+func (s DeckStorage) GetByUserID(ctx context.Context, userID string) ([]model.Deck, error) {
+	sqlcDecks, err := s.queries.GetDeckByUserID(ctx, userID)
+	if err != nil {
+		return nil, err
 	}
 
-	if err := json.Unmarshal(sqlcDeck.Cards, &modelDeck.Cards); err != nil {
-		return model.Deck{}, err
+	var modelDecks []model.Deck
+	for _, sqlcDeck := range sqlcDecks {
+		modelDeck, err := convertDeck(sqlcDeck)
+		if err != nil {
+			return nil, err
+		}
+
+		modelDecks = append(modelDecks, modelDeck)
 	}
 
-	return modelDeck, nil
+	return modelDecks, nil
 }
 
 func (s DeckStorage) List(ctx context.Context) ([]model.Deck, error) {
@@ -46,15 +53,8 @@ func (s DeckStorage) List(ctx context.Context) ([]model.Deck, error) {
 
 	var modelDecks []model.Deck
 	for _, sqlcDeck := range sqlcDecks {
-		modelDeck := model.Deck{
-			ID:        sqlcDeck.ID,
-			UserID:    sqlcDeck.UserID,
-			Title:     sqlcDeck.Title,
-			CreatedAt: sqlcDeck.CreatedAt,
-			UpdatedAt: sqlcDeck.UpdatedAt,
-		}
-
-		if err := json.Unmarshal(sqlcDeck.Cards, &modelDeck.Cards); err != nil {
+		modelDeck, err := convertDeck(sqlcDeck)
+		if err != nil {
 			return nil, err
 		}
 
@@ -71,10 +71,11 @@ func (s *DeckStorage) Create(ctx context.Context, arg storage.DeckCreateParams) 
 	}
 
 	return s.queries.CreateDeck(ctx, sqlc.CreateDeckParams{
-		ID:     arg.ID,
-		UserID: arg.UserID,
-		Title:  arg.Title,
-		Cards:  cardsJSON,
+		ID:      arg.ID,
+		UserID:  arg.UserID,
+		Title:   arg.Title,
+		Cards:   cardsJSON,
+		Subject: toNullString(arg.Subject),
 	})
 }
 
@@ -85,12 +86,30 @@ func (s *DeckStorage) Update(ctx context.Context, id string, arg storage.DeckUpd
 	}
 
 	return s.queries.UpdateDeck(ctx, sqlc.UpdateDeckParams{
-		ID:    id,
-		Title: arg.Title,
-		Cards: cardsJSON,
+		ID:      id,
+		Title:   arg.Title,
+		Cards:   cardsJSON,
+		Subject: toNullString(arg.Subject),
 	})
 }
 
 func (s *DeckStorage) Delete(ctx context.Context, id string) error {
 	return s.queries.DeleteDeck(ctx, id)
+}
+
+func convertDeck(sqlcDeck sqlc.Deck) (model.Deck, error) {
+	modelDeck := model.Deck{
+		ID:        sqlcDeck.ID,
+		UserID:    sqlcDeck.UserID,
+		Title:     sqlcDeck.Title,
+		Subject:   sqlcDeck.Subject.String,
+		CreatedAt: sqlcDeck.CreatedAt,
+		UpdatedAt: sqlcDeck.UpdatedAt,
+	}
+
+	if err := json.Unmarshal(sqlcDeck.Cards, &modelDeck.Cards); err != nil {
+		return model.Deck{}, err
+	}
+
+	return modelDeck, nil
 }

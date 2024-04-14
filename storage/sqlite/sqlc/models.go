@@ -5,6 +5,7 @@
 package sqlc
 
 import (
+	"database/sql"
 	"net"
 	"time"
 )
@@ -14,6 +15,7 @@ type Deck struct {
 	UserID    string
 	Title     string
 	Cards     []byte
+	Subject   sql.NullString
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -28,9 +30,12 @@ type Session struct {
 }
 
 type User struct {
-	ID        string
-	Username  string
-	Email     string
-	Password  []byte
-	CreatedAt time.Time
+	ID          string
+	Username    string
+	Email       string
+	Password    []byte
+	Name        string
+	Description sql.NullString
+	Picture     sql.NullString
+	CreatedAt   time.Time
 }
