@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/axseem/learway/api/presenter"
 	"github.com/axseem/learway/model"
 	"github.com/labstack/echo/v4"
 )
@@ -40,12 +41,21 @@ func (h DeckHandler) Get(c echo.Context) error {
 }
 
 func (h DeckHandler) Create(c echo.Context) error {
-	var arg model.DeckCreateParams
+	sessionID, err := c.Cookie("sessionID")
+	if err != nil {
+		return err
+	}
+
+	var arg presenter.DeckCreateParams
 	if err := c.Bind(&arg); err != nil {
 		return err
 	}
 
-	deck, err := h.DeckService.Create(c.Request().Context(), arg)
+	deck, err := h.DeckService.Create(c.Request().Context(), model.DeckCreateParams{
+		SessionID: sessionID.Value,
+		Title:     arg.Title,
+		Cards:     arg.Cards,
+	})
 	if err != nil {
 		code := echo.ErrInternalServerError.Code
 		message := "failed to create deck"
@@ -59,7 +69,7 @@ func (h DeckHandler) Create(c echo.Context) error {
 func (h DeckHandler) Update(c echo.Context) error {
 	id := c.Param("id")
 
-	var arg model.DeckCreateParams
+	var arg model.DeckUpdateParams
 	if err := c.Bind(&arg); err != nil {
 		return err
 	}

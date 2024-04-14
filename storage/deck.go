@@ -7,9 +7,10 @@ import (
 )
 
 type DeckCreateParams struct {
-	ID    string
-	Title string
-	Cards model.Cards
+	ID     string
+	UserID string
+	Title  string
+	Cards  model.Cards
 }
 
 type DeckUpdateParams struct {

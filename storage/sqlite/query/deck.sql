@@ -10,7 +10,7 @@ FROM deck
 ORDER BY created_at DESC;
 
 -- name: CreateDeck :exec
-INSERT INTO deck (id, title, cards) VALUES (?, ?, ?);
+INSERT INTO deck (id, user_id, title, cards) VALUES (?, ?, ?, ?);
 
 -- name: UpdateDeck :exec
 UPDATE deck

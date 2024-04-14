@@ -10,17 +10,23 @@ import (
 )
 
 const createDeck = `-- name: CreateDeck :exec
-INSERT INTO deck (id, title, cards) VALUES (?, ?, ?)
+INSERT INTO deck (id, user_id, title, cards) VALUES (?, ?, ?, ?)
 `
 
 type CreateDeckParams struct {
-	ID    string
-	Title string
-	Cards []byte
+	ID     string
+	UserID string
+	Title  string
+	Cards  []byte
 }
 
 func (q *Queries) CreateDeck(ctx context.Context, arg CreateDeckParams) error {
-	_, err := q.db.ExecContext(ctx, createDeck, arg.ID, arg.Title, arg.Cards)
+	_, err := q.db.ExecContext(ctx, createDeck,
+		arg.ID,
+		arg.UserID,
+		arg.Title,
+		arg.Cards,
+	)
 	return err
 }
 
@@ -36,7 +42,7 @@ func (q *Queries) DeleteDeck(ctx context.Context, id string) error {
 }
 
 const getDeck = `-- name: GetDeck :one
-SELECT id, title, cards, created_at, updated_at
+SELECT id, user_id, title, cards, created_at, updated_at
 FROM deck
 WHERE id = ?
 LIMIT 1
@@ -47,6 +53,7 @@ func (q *Queries) GetDeck(ctx context.Context, id string) (Deck, error) {
 	var i Deck
 	err := row.Scan(
 		&i.ID,
+		&i.UserID,
 		&i.Title,
 		&i.Cards,
 		&i.CreatedAt,
@@ -56,7 +63,7 @@ func (q *Queries) GetDeck(ctx context.Context, id string) (Deck, error) {
 }
 
 const listDecks = `-- name: ListDecks :many
-SELECT id, title, cards, created_at, updated_at
+SELECT id, user_id, title, cards, created_at, updated_at
 FROM deck
 ORDER BY created_at DESC
 `
@@ -72,6 +79,7 @@ func (q *Queries) ListDecks(ctx context.Context) ([]Deck, error) {
 		var i Deck
 		if err := rows.Scan(
 			&i.ID,
+			&i.UserID,
 			&i.Title,
 			&i.Cards,
 			&i.CreatedAt,

@@ -25,6 +25,7 @@ func (s DeckStorage) Get(ctx context.Context, id string) (model.Deck, error) {
 
 	modelDeck := model.Deck{
 		ID:        sqlcDeck.ID,
+		UserID:    sqlcDeck.UserID,
 		Title:     sqlcDeck.Title,
 		CreatedAt: sqlcDeck.CreatedAt,
 		UpdatedAt: sqlcDeck.UpdatedAt,
@@ -47,6 +48,7 @@ func (s DeckStorage) List(ctx context.Context) ([]model.Deck, error) {
 	for _, sqlcDeck := range sqlcDecks {
 		modelDeck := model.Deck{
 			ID:        sqlcDeck.ID,
+			UserID:    sqlcDeck.UserID,
 			Title:     sqlcDeck.Title,
 			CreatedAt: sqlcDeck.CreatedAt,
 			UpdatedAt: sqlcDeck.UpdatedAt,
@@ -69,9 +71,10 @@ func (s *DeckStorage) Create(ctx context.Context, arg storage.DeckCreateParams) 
 	}
 
 	return s.queries.CreateDeck(ctx, sqlc.CreateDeckParams{
-		ID:    arg.ID,
-		Title: arg.Title,
-		Cards: cardsJSON,
+		ID:     arg.ID,
+		UserID: arg.UserID,
+		Title:  arg.Title,
+		Cards:  cardsJSON,
 	})
 }
 

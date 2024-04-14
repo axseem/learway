@@ -40,20 +40,25 @@ func (s Deck) Create(ctx context.Context, arg model.DeckCreateParams) (model.Dec
 		log.Fatal(err)
 	}
 
-	deckCreateParams := storage.DeckCreateParams{
-		ID:    id,
-		Title: arg.Title,
-		Cards: arg.Cards,
+	session, err := s.storage.Session.GetByID(ctx, arg.SessionID)
+	if err != nil {
+		return model.Deck{}, err
 	}
 
-	if err = s.storage.Deck.Create(ctx, deckCreateParams); err != nil {
+	err = s.storage.Deck.Create(ctx, storage.DeckCreateParams{
+		ID:     id,
+		UserID: session.UserID,
+		Title:  arg.Title,
+		Cards:  arg.Cards,
+	})
+	if err != nil {
 		return model.Deck{}, err
 	}
 
 	return s.storage.Deck.Get(ctx, id)
 }
 
-func (s Deck) Update(ctx context.Context, id string, arg model.DeckCreateParams) (model.Deck, error) {
+func (s Deck) Update(ctx context.Context, id string, arg model.DeckUpdateParams) (model.Deck, error) {
 	if err := s.validator.Struct(arg); err != nil {
 		return model.Deck{}, err
 	}

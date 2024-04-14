@@ -26,6 +26,7 @@ func (s DeckStorage) List(ctx context.Context) ([]model.Deck, error) {
 func (s *DeckStorage) Create(ctx context.Context, arg storage.DeckCreateParams) error {
 	newDeck := model.Deck{
 		ID:        arg.ID,
+		UserID:    arg.UserID,
 		Title:     arg.Title,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
