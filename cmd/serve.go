@@ -11,18 +11,21 @@ import (
 )
 
 func Serve() error {
-	sqliteDB, err := sql.Open("sqlite", "./dev.db")
+	sqliteDB, err := sql.Open("sqlite", "./learway.db")
 	if err != nil {
 		return err
 	}
 	defer sqliteDB.Close()
 	queries := sqlite.New(sqliteDB)
 
+	if err = sqlite.Migrate(sqliteDB); err != nil {
+		return err
+	}
+
 	e := echo.New()
 	e.Use(middleware.Gzip())
 	e.Use(middleware.Decompress())
 	e.Use(middleware.Recover())
-	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(32)))
 	e.Use(middleware.Secure())
 
 	api.API(e, queries)

@@ -18,6 +18,10 @@ func Dev() error {
 	defer sqliteDB.Close()
 	queries := sqlite.New(sqliteDB)
 
+	if err = sqlite.Migrate(sqliteDB); err != nil {
+		return err
+	}
+
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"http://localhost:5173"},
