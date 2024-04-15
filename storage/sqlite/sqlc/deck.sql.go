@@ -141,6 +141,44 @@ func (q *Queries) ListDecks(ctx context.Context) ([]Deck, error) {
 	return items, nil
 }
 
+const searchDeck = `-- name: SearchDeck :many
+SELECT id, user_id, title, cards, subject, created_at, updated_at
+FROM deck
+WHERE title
+LIKE ?
+`
+
+func (q *Queries) SearchDeck(ctx context.Context, title string) ([]Deck, error) {
+	rows, err := q.db.QueryContext(ctx, searchDeck, title)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Deck
+	for rows.Next() {
+		var i Deck
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Cards,
+			&i.Subject,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateDeck = `-- name: UpdateDeck :exec
 UPDATE deck
 SET title = ?, cards = ?, subject = ?, updated_at = CURRENT_TIMESTAMP

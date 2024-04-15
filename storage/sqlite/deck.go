@@ -31,18 +31,7 @@ func (s DeckStorage) GetByUserID(ctx context.Context, userID string) ([]model.De
 	if err != nil {
 		return nil, err
 	}
-
-	var modelDecks []model.Deck
-	for _, sqlcDeck := range sqlcDecks {
-		modelDeck, err := convertDeck(sqlcDeck)
-		if err != nil {
-			return nil, err
-		}
-
-		modelDecks = append(modelDecks, modelDeck)
-	}
-
-	return modelDecks, nil
+	return convertDeckSlice(sqlcDecks)
 }
 
 func (s DeckStorage) List(ctx context.Context) ([]model.Deck, error) {
@@ -50,18 +39,7 @@ func (s DeckStorage) List(ctx context.Context) ([]model.Deck, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	var modelDecks []model.Deck
-	for _, sqlcDeck := range sqlcDecks {
-		modelDeck, err := convertDeck(sqlcDeck)
-		if err != nil {
-			return nil, err
-		}
-
-		modelDecks = append(modelDecks, modelDeck)
-	}
-
-	return modelDecks, nil
+	return convertDeckSlice(sqlcDecks)
 }
 
 func (s *DeckStorage) Create(ctx context.Context, arg storage.DeckCreateParams) error {
@@ -97,6 +75,14 @@ func (s *DeckStorage) Delete(ctx context.Context, id string) error {
 	return s.queries.DeleteDeck(ctx, id)
 }
 
+func (s DeckStorage) Search(ctx context.Context, title string) ([]model.Deck, error) {
+	sqlcDecks, err := s.queries.SearchDeck(ctx, "%"+title+"%")
+	if err != nil {
+		return nil, err
+	}
+	return convertDeckSlice(sqlcDecks)
+}
+
 func convertDeck(sqlcDeck sqlc.Deck) (model.Deck, error) {
 	modelDeck := model.Deck{
 		ID:        sqlcDeck.ID,
@@ -112,4 +98,17 @@ func convertDeck(sqlcDeck sqlc.Deck) (model.Deck, error) {
 	}
 
 	return modelDeck, nil
+}
+
+func convertDeckSlice(sqlcDecks []sqlc.Deck) ([]model.Deck, error) {
+	var modelDecks []model.Deck
+	for _, sqlcDeck := range sqlcDecks {
+		modelDeck, err := convertDeck(sqlcDeck)
+		if err != nil {
+			return nil, err
+		}
+
+		modelDecks = append(modelDecks, modelDeck)
+	}
+	return modelDecks, nil
 }

@@ -78,3 +78,7 @@ func (s Deck) Update(ctx context.Context, id string, arg model.DeckUpdateParams)
 func (s Deck) Delete(ctx context.Context, id string) error {
 	return s.storage.Deck.Delete(ctx, id)
 }
+
+func (s Deck) Search(ctx context.Context, title string) ([]model.Deck, error) {
+	return s.storage.Deck.Search(ctx, title)
+}

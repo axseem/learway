@@ -2,6 +2,7 @@ package memory
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/axseem/learway/model"
@@ -71,4 +72,20 @@ func (s *DeckStorage) Delete(ctx context.Context, id string) error {
 		}
 	}
 	return ErrNotFound
+}
+
+func (s DeckStorage) Search(ctx context.Context, title string) ([]model.Deck, error) {
+	var decks []model.Deck
+
+	for _, deck := range s {
+		if strings.Contains(deck.Title, title) {
+			decks = append(decks, deck)
+		}
+	}
+
+	if len(decks) == 0 {
+		return nil, ErrNotFound
+	}
+
+	return decks, nil
 }

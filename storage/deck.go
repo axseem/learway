@@ -27,4 +27,5 @@ type DeckRepo interface {
 	Create(ctx context.Context, arg DeckCreateParams) error
 	Update(ctx context.Context, id string, arg DeckUpdateParams) error
 	Delete(ctx context.Context, id string) error
+	Search(ctx context.Context, title string) ([]model.Deck, error)
 }

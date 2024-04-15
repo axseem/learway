@@ -96,3 +96,15 @@ func (h DeckHandler) Delete(c echo.Context) error {
 	c.JSON(http.StatusOK, decks)
 	return nil
 }
+
+func (h DeckHandler) Search(c echo.Context) error {
+	title := c.Param("title")
+
+	decks, err := h.DeckService.Search(c.Request().Context(), title)
+	if err != nil {
+		return err
+	}
+
+	c.JSON(http.StatusOK, decks)
+	return nil
+}

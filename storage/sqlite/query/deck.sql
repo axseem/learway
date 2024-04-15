@@ -27,3 +27,9 @@ WHERE id = ?;
 DELETE
 FROM deck
 WHERE id = ?;
+
+-- name: SearchDeck :many
+SELECT *
+FROM deck
+WHERE title
+LIKE ?;
