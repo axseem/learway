@@ -3,6 +3,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { UserCredentials } from '$lib/types';
 	import { apiUrl } from '$lib/api';
+	import { goto } from '$app/navigation';
 
 	const login = async (p: UserCredentials) => {
 		let r = await fetch(apiUrl + '/login', {
@@ -26,7 +27,7 @@
 			let expires = new Date(session.expiresAt).toUTCString();
 			document.cookie = `sessionID=${session.id}; expires=${expires}; path=/; secure=true;`;
 			localStorage.setItem('username', username);
-			window.location.replace('/');
+			goto('/');
 			return;
 		}
 	};

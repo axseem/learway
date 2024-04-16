@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { goto, invalidate } from '$app/navigation';
+	import Button from '$lib/components/ui/button/button.svelte';
+
 	let darkMode = $state(true);
 
 	function switchTheme() {
@@ -21,6 +24,12 @@
 		document.documentElement.classList.remove('dark');
 		darkMode = false;
 	}
+
+	const logOut = () => {
+		document.cookie = `sessionID=; max-age=0; path=/; secure=true;`;
+		localStorage.removeItem('username');
+		window.location.href = '/';
+	};
 </script>
 
 <div class="flex h-full w-full justify-center">
@@ -35,5 +44,6 @@
 			/>
 			<label for="dark">Dark mode</label>
 		</div>
+		<Button on:click={logOut} variant="destructive" data-sveltekit-reload>logOut</Button>
 	</div>
 </div>
