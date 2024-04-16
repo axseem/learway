@@ -82,3 +82,7 @@ func (s Auth) LogIn(ctx context.Context, arg model.LogInParams) (model.AuthRetur
 		Username: user.Username,
 	}, nil
 }
+
+func (s Auth) GetSessionData(ctx context.Context, sessionID string) (model.Session, error) {
+	return s.sessionService.GetByID(ctx, sessionID)
+}

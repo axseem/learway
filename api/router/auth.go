@@ -8,4 +8,5 @@ import (
 func Auth(api *echo.Group, h *handler.AuthHandler) {
 	api.POST("/signup", h.SignUp)
 	api.POST("/login", h.LogIn)
+	api.POST("/session", h.GetSession)
 }

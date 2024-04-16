@@ -24,8 +24,7 @@ func (h DeckHandler) List(c echo.Context) error {
 		return err
 	}
 
-	c.JSON(http.StatusOK, decks)
-	return nil
+	return c.JSON(http.StatusOK, decks)
 }
 
 func (h DeckHandler) Get(c echo.Context) error {
@@ -36,8 +35,7 @@ func (h DeckHandler) Get(c echo.Context) error {
 		return err
 	}
 
-	c.JSON(http.StatusOK, deck)
-	return nil
+	return c.JSON(http.StatusOK, deck)
 }
 
 func (h DeckHandler) Create(c echo.Context) error {
@@ -62,8 +60,7 @@ func (h DeckHandler) Create(c echo.Context) error {
 		return echo.NewHTTPError(code, message)
 	}
 
-	c.JSON(http.StatusCreated, deck)
-	return nil
+	return c.JSON(http.StatusCreated, deck)
 }
 
 func (h DeckHandler) Update(c echo.Context) error {
@@ -81,8 +78,7 @@ func (h DeckHandler) Update(c echo.Context) error {
 		return echo.NewHTTPError(code, message)
 	}
 
-	c.JSON(http.StatusCreated, deck)
-	return nil
+	return c.JSON(http.StatusCreated, deck)
 }
 
 func (h DeckHandler) Delete(c echo.Context) error {
@@ -93,8 +89,7 @@ func (h DeckHandler) Delete(c echo.Context) error {
 		return echo.NewHTTPError(code, message)
 	}
 
-	c.JSON(http.StatusOK, decks)
-	return nil
+	return c.JSON(http.StatusOK, decks)
 }
 
 func (h DeckHandler) Search(c echo.Context) error {
@@ -105,6 +100,5 @@ func (h DeckHandler) Search(c echo.Context) error {
 		return err
 	}
 
-	c.JSON(http.StatusOK, decks)
-	return nil
+	return c.JSON(http.StatusOK, decks)
 }

@@ -79,3 +79,20 @@ func (h AuthHandler) LogIn(c echo.Context) error {
 		Username: authResponse.Username,
 	})
 }
+
+func (h AuthHandler) GetSession(c echo.Context) error {
+	sessionID, err := c.Cookie("sessionID")
+	if err != nil {
+		return err
+	}
+
+	session, err := h.authService.GetSessionData(c.Request().Context(), sessionID.Value)
+	if err != nil {
+		return echo.ErrUnauthorized
+	}
+
+	return c.JSON(http.StatusOK, presenter.Session{
+		ID:        session.ID,
+		ExpiresAt: session.ExpiresAt,
+	})
+}

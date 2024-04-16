@@ -28,4 +28,5 @@ type AuthReturnValues struct {
 type AuthRepo interface {
 	SignUp(ctx context.Context, arg SignUpParams) (AuthReturnValues, error)
 	LogIn(ctx context.Context, arg LogInParams) (AuthReturnValues, error)
+	GetSessionData(ctx context.Context, sessionID string) (Session, error)
 }
