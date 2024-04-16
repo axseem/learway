@@ -1,17 +1,33 @@
-<script>
+<script lang="ts">
+	import { CirclePlus } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import { goto } from '$app/navigation';
 
 	let { children, data } = $props();
 	let authorized = $state(data.authorized);
+
+	let searchValue: string = $state('');
+
+	const search = (title: string) => {
+		if (title.trim() != '') {
+			goto('/search/' + title);
+		}
+	};
 </script>
 
 <div class="bg-background text-foreground flex h-screen ring-1">
 	<aside class="flex h-full w-64 shrink-0 flex-col border-r border-t">
 		<a class="border-b p-4 font-mono" href="/">learway</a>
-		<div class="px-4 pt-4">
-			<Input placeholder="Search for knowledge" />
-		</div>
+		<form
+			on:submit|preventDefault={() => {
+				search(searchValue);
+				searchValue = '';
+			}}
+			class="px-4 pt-4"
+		>
+			<Input bind:value={searchValue} placeholder="Search for knowledge" />
+		</form>
 		<div class="flex flex-col gap-2 p-4">
 			<Button variant="ghost" href="/" class="justify-start">Recent</Button>
 			<Button variant="ghost" href="/" class="justify-start">Popular</Button>
@@ -19,8 +35,10 @@
 		</div>
 		<div class="mt-auto flex flex-col gap-4 py-4">
 			{#if authorized}
-				<Button variant="secondary" href="/create" class="mx-4">+ Create deck</Button>
-
+				<Button variant="secondary" href="/create" class="mx-4 gap-2">
+					<CirclePlus size={16} />
+					Create deck
+				</Button>
 				<Button
 					variant="outline"
 					href="/settings"

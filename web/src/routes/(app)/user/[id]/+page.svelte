@@ -3,4 +3,4 @@
 	let user = $state(data.user);
 </script>
 
-<p>user @{user}</p>
+<p>user @{user.username}</p>
