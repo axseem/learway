@@ -1,4 +1,3 @@
-dev.db
-learway.db
+*.db
+*_db_ver
 tmp
-db_ver
