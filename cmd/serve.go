@@ -11,14 +11,15 @@ import (
 )
 
 func Serve() error {
-	sqliteDB, err := sql.Open("sqlite", "./learway.db")
+	dbFileName := "learway"
+	sqliteDB, err := sql.Open("sqlite", "./"+dbFileName+".db")
 	if err != nil {
 		return err
 	}
 	defer sqliteDB.Close()
 	queries := sqlite.New(sqliteDB)
 
-	if err = sqlite.Migrate(sqliteDB); err != nil {
+	if err = sqlite.Migrate(sqliteDB, dbFileName); err != nil {
 		return err
 	}
 

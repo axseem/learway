@@ -14,13 +14,13 @@ import (
 //go:embed migrations/*.sql
 var embedMigration embed.FS
 
-func Migrate(db *sql.DB) error {
+func Migrate(db *sql.DB, name string) error {
 	entries, err := embedMigration.ReadDir("migrations")
 	if err != nil {
 		return fmt.Errorf("failed to read migration directory: %w", err)
 	}
 
-	appliedMigrations, appliedMigrationsFile := getAppliedMigrations()
+	appliedMigrations, appliedMigrationsFile := getAppliedMigrations(name)
 	defer appliedMigrationsFile.Close()
 
 	for i, entry := range entries {
@@ -53,8 +53,8 @@ func Migrate(db *sql.DB) error {
 	return nil
 }
 
-func getAppliedMigrations() ([]string, os.File) {
-	appliedMigrationsFile, err := os.OpenFile("db_ver", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+func getAppliedMigrations(name string) ([]string, os.File) {
+	appliedMigrationsFile, err := os.OpenFile(name+"_db_ver", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
