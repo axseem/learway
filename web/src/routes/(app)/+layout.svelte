@@ -3,6 +3,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { goto } from '$app/navigation';
+	import ThemeDropdown from '$lib/components/ThemeDropdown.svelte';
 
 	let { children, data } = $props();
 	let authorized = $state(data.authorized);
@@ -18,7 +19,12 @@
 
 <div class="bg-background text-foreground flex h-screen ring-1">
 	<aside class="flex h-full w-64 shrink-0 flex-col border-r border-t">
-		<a class="border-b p-4 font-mono" href="/">learway</a>
+		<div class="flex shrink-0 items-center border-b">
+			<a class="w-full p-4 font-mono" href="/">learway</a>
+			<div class="mr-2">
+				<ThemeDropdown />
+			</div>
+		</div>
 		<form
 			on:submit|preventDefault={() => {
 				search(searchValue);
