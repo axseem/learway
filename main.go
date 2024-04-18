@@ -10,8 +10,8 @@ import (
 
 func main() {
 	app := cli.App{
-		Name:  "lerway",
-		Usage: "cli to manage lerway server",
+		Name:  "learway",
+		Usage: "cli to manage learway server",
 		Commands: []*cli.Command{
 			{
 				Name:  "dev",
@@ -29,7 +29,7 @@ func main() {
 			},
 			{
 				Name:  "serve",
-				Usage: "run srever in production ready mode",
+				Usage: "run server in production ready mode",
 				Action: func(ctx *cli.Context) error {
 					return cmd.Serve()
 				},

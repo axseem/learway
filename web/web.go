@@ -1,3 +1,4 @@
+// Package web embeds web app static files and allows to serve it with echo.
 package web
 
 import (

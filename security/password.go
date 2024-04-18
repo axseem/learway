@@ -1,3 +1,4 @@
+// Package security implements user data privacy features.
 package security
 
 import (
@@ -26,7 +27,7 @@ func ValidatePassword(password string) error {
 		hasUpper = hasUpper || unicode.IsUpper(r)
 		hasLower = hasLower || unicode.IsLower(r)
 
-		// ASCII charactes from 33 to 126: !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+		// ASCII characters from 33 to 126: !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 		if r < 33 || r > 126 {
 			return errors.New("password contains an invalid character: " + string(r))
 		}

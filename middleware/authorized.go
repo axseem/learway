@@ -1,3 +1,4 @@
+// Package middleware contains custom middlewares.
 package middleware
 
 import (
@@ -9,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Gives access to the handler only if session is valid.
 func Authorized(sessionStorage storage.SessionRepo) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
@@ -22,7 +24,7 @@ func Authorized(sessionStorage storage.SessionRepo) echo.MiddlewareFunc {
 			session, err := sessionStorage.GetByID(c.Request().Context(), sessionID.Value)
 			if err != nil {
 				code := echo.ErrUnauthorized.Code
-				message := "non-existent session"
+				message := "invalid session"
 				return echo.NewHTTPError(code, message)
 			}
 
@@ -38,6 +40,7 @@ func Authorized(sessionStorage storage.SessionRepo) echo.MiddlewareFunc {
 				ExpiresAt:   time.Now().Add(time.Hour * 24 * 7),
 			}
 
+			// update IP, fingerprint and expiration time, so user does not need to log in every N amount of time.
 			if err := sessionStorage.Update(c.Request().Context(), session.ID, sessionUpdateParams); err != nil {
 				code := echo.ErrInternalServerError.Code
 				message := "failed to update session"

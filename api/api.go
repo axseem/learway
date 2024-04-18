@@ -1,3 +1,4 @@
+// Package api implements API group for echo app.
 package api
 
 import (
