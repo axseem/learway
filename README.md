@@ -2,9 +2,9 @@
 
 > WIP! Project is still in early stage of development
 
-# What is lerway?
+# What is learway?
 
-lerway is user-friendly flashcard-based learning platform. It allows to look for, create and share flashcard decks to expand your knowledge.
+learway is user-friendly flashcard-based learning platform. It allows to look for, create and share flashcard decks to expand your knowledge.
 
 # Preview
 
@@ -29,7 +29,7 @@ Currently learway consists of API server (Backend) and SPA web app (Frontend). B
 
 # App
 
-After buiding the project (or downloading prebuilt), you will get a sigle binary. By itself it is a CLI app which allows you to manage how learway service will be served.
+After building the project (or downloading prebuilt), you will get a single binary. By itself it is a CLI app which allows you to manage how learway service will be served.
 
 For now there are three commands available
 
@@ -44,4 +44,4 @@ learway seed
 learway dev
 ```
 
-In the development environment, CORS is enabled and static files are not served. The frontend is expected to run seppratly using `npm run dev`. This setup allows hot reloading and facilitates easier debugging of the frontend application
+In the development environment, CORS is enabled and static files are not served. The frontend is expected to run separately using `npm run dev`. This setup allows hot reloading and facilitates easier debugging of the frontend application
