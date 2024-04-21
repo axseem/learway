@@ -19,14 +19,13 @@ func API(e *echo.Echo, queries *storage.Queries) {
 
 	deckService := service.NewDeckService(queries, v)
 	userService := service.NewUserService(queries, v)
-	sessionService := service.NewSessionService(queries, v)
-	authService := service.NewAuthService(userService, sessionService, v)
+	sessionService := service.NewSessionService(queries, userService, v)
 
 	deckHandler := handler.NewDeckHandler(deckService)
 	userHandler := handler.NewUserHandler(userService, deckService)
-	authHandler := handler.NewAuthHandler(authService)
+	sessionHandler := handler.NewSessionHandler(sessionService)
 
 	router.Deck(api, apiAuth, deckHandler)
 	router.User(api, userHandler)
-	router.Auth(api, authHandler)
+	router.Session(api, sessionHandler)
 }

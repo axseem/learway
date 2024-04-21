@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type LogInParms struct {
+type LogInParams struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }

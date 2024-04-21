@@ -9,17 +9,17 @@ import (
 )
 
 type DeckHandler struct {
-	DeckService model.DeckRepo
+	deckService model.DeckRepo
 }
 
 func NewDeckHandler(deckService model.DeckRepo) *DeckHandler {
 	return &DeckHandler{
-		DeckService: deckService,
+		deckService: deckService,
 	}
 }
 
 func (h DeckHandler) List(c echo.Context) error {
-	decks, err := h.DeckService.List(c.Request().Context())
+	decks, err := h.deckService.List(c.Request().Context())
 	if err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func (h DeckHandler) List(c echo.Context) error {
 func (h DeckHandler) Get(c echo.Context) error {
 	id := c.Param("id")
 
-	deck, err := h.DeckService.Get(c.Request().Context(), id)
+	deck, err := h.deckService.Get(c.Request().Context(), id)
 	if err != nil {
 		return err
 	}
@@ -49,7 +49,7 @@ func (h DeckHandler) Create(c echo.Context) error {
 		return err
 	}
 
-	deck, err := h.DeckService.Create(c.Request().Context(), model.DeckCreateParams{
+	deck, err := h.deckService.Create(c.Request().Context(), model.DeckCreateParams{
 		SessionID: sessionID.Value,
 		Title:     arg.Title,
 		Cards:     arg.Cards,
@@ -71,7 +71,7 @@ func (h DeckHandler) Update(c echo.Context) error {
 		return err
 	}
 
-	deck, err := h.DeckService.Update(c.Request().Context(), id, arg)
+	deck, err := h.deckService.Update(c.Request().Context(), id, arg)
 	if err != nil {
 		code := echo.ErrInternalServerError.Code
 		message := "failed to update deck"
@@ -82,7 +82,7 @@ func (h DeckHandler) Update(c echo.Context) error {
 }
 
 func (h DeckHandler) Delete(c echo.Context) error {
-	decks, err := h.DeckService.List(c.Request().Context())
+	decks, err := h.deckService.List(c.Request().Context())
 	if err != nil {
 		code := echo.ErrInternalServerError.Code
 		message := "failed to list decks"
@@ -95,7 +95,7 @@ func (h DeckHandler) Delete(c echo.Context) error {
 func (h DeckHandler) Search(c echo.Context) error {
 	title := c.Param("title")
 
-	decks, err := h.DeckService.Search(c.Request().Context(), title)
+	decks, err := h.deckService.Search(c.Request().Context(), title)
 	if err != nil {
 		return err
 	}

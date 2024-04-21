@@ -9,23 +9,23 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type AuthHandler struct {
-	authService model.AuthRepo
+type SessionHandler struct {
+	sessionService model.SessionRepo
 }
 
-func NewAuthHandler(authService model.AuthRepo) *AuthHandler {
-	return &AuthHandler{
-		authService: authService,
+func NewSessionHandler(sessionService model.SessionRepo) *SessionHandler {
+	return &SessionHandler{
+		sessionService: sessionService,
 	}
 }
 
-func (h AuthHandler) SignUp(c echo.Context) error {
+func (h SessionHandler) SignUp(c echo.Context) error {
 	userCreateParams := new(model.UserCreateParams)
 	if err := c.Bind(&userCreateParams); err != nil {
 		return err
 	}
 
-	authResponse, err := h.authService.SignUp(c.Request().Context(), model.SignUpParams{
+	authResponse, err := h.sessionService.SignUp(c.Request().Context(), model.SignUpParams{
 		Username:    userCreateParams.Username,
 		Email:       userCreateParams.Email,
 		Password:    userCreateParams.Password,
@@ -34,7 +34,7 @@ func (h AuthHandler) SignUp(c echo.Context) error {
 	})
 	if err != nil {
 		code := echo.ErrBadRequest.Code
-		message := "ivalid credentials"
+		message := "invalid credentials"
 		return echo.NewHTTPError(code, message)
 	}
 
@@ -47,10 +47,10 @@ func (h AuthHandler) SignUp(c echo.Context) error {
 	})
 }
 
-func (h AuthHandler) LogIn(c echo.Context) error {
+func (h SessionHandler) LogIn(c echo.Context) error {
 	email, password, ok := c.Request().BasicAuth()
 	if !ok {
-		var logInParms presenter.LogInParms
+		var logInParms presenter.LogInParams
 		if err := c.Bind(&logInParms); err != nil {
 			return err
 		}
@@ -59,7 +59,7 @@ func (h AuthHandler) LogIn(c echo.Context) error {
 		password = logInParms.Password
 	}
 
-	authResponse, err := h.authService.LogIn(c.Request().Context(), model.LogInParams{
+	authResponse, err := h.sessionService.LogIn(c.Request().Context(), model.LogInParams{
 		Email:       email,
 		Password:    password,
 		Fingerprint: []byte(c.Request().UserAgent()),
@@ -80,13 +80,13 @@ func (h AuthHandler) LogIn(c echo.Context) error {
 	})
 }
 
-func (h AuthHandler) GetSession(c echo.Context) error {
+func (h SessionHandler) GetSession(c echo.Context) error {
 	sessionID, err := c.Cookie("sessionID")
 	if err != nil {
 		return err
 	}
 
-	session, err := h.authService.GetSessionData(c.Request().Context(), sessionID.Value)
+	session, err := h.sessionService.GetByID(c.Request().Context(), sessionID.Value)
 	if err != nil {
 		return echo.ErrUnauthorized
 	}

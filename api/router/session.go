@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Auth(api *echo.Group, h *handler.AuthHandler) {
+func Session(api *echo.Group, h *handler.SessionHandler) {
 	api.POST("/signup", h.SignUp)
 	api.POST("/login", h.LogIn)
 	api.GET("/session", h.GetSession)

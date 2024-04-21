@@ -10,21 +10,21 @@ import (
 )
 
 type UserHandler struct {
-	UserService model.UserRepo
-	DeckService model.DeckRepo
+	userService model.UserRepo
+	deckService model.DeckRepo
 }
 
 func NewUserHandler(userService model.UserRepo, deckService model.DeckRepo) *UserHandler {
 	return &UserHandler{
-		UserService: userService,
-		DeckService: deckService,
+		userService: userService,
+		deckService: deckService,
 	}
 }
 
 func (h UserHandler) Get(c echo.Context) error {
 	username := c.Param("username")
 
-	user, err := h.UserService.GetByUsername(c.Request().Context(), username)
+	user, err := h.userService.GetByUsername(c.Request().Context(), username)
 	if err != nil {
 		return err
 	}
@@ -39,13 +39,13 @@ func (h UserHandler) Get(c echo.Context) error {
 func (h UserHandler) GetDecks(c echo.Context) error {
 	username := c.Param("username")
 
-	user, err := h.UserService.GetByUsername(c.Request().Context(), username)
+	user, err := h.userService.GetByUsername(c.Request().Context(), username)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	decks, err := h.DeckService.GetByUserID(c.Request().Context(), user.ID)
+	decks, err := h.deckService.GetByUserID(c.Request().Context(), user.ID)
 	if err != nil {
 		return err
 	}
