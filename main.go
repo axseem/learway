@@ -34,6 +34,13 @@ func main() {
 					return cmd.Serve()
 				},
 			},
+			{
+				Name:  "migrate",
+				Usage: "apply migration queries to database",
+				Action: func(ctx *cli.Context) error {
+					return cmd.Migrate(ctx.Args().First())
+				},
+			},
 		},
 	}
 
