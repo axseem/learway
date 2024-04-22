@@ -78,3 +78,29 @@ func getAppliedMigrations(name string) ([]string, os.File) {
 
 	return appliedMigrations, *appliedMigrationsFile
 }
+
+func ForceMigrate(db *sql.DB, name string) error {
+	entries, err := embedMigration.ReadDir("migrations")
+	if err != nil {
+		return fmt.Errorf("failed to read migration directory: %w", err)
+	}
+
+	for _, entry := range entries {
+		content, err := fs.ReadFile(embedMigration, "migrations/"+entry.Name())
+		if err != nil {
+			return fmt.Errorf("failed to read migration file %s: %w", entry.Name(), err)
+		}
+
+		queries := strings.Split(string(content), ";")
+		for _, query := range queries {
+			if strings.TrimSpace(query) == "" {
+				continue
+			}
+			if _, err := db.Exec(query); err != nil {
+				return fmt.Errorf("failed to execute migration query in file %s: %w", entry.Name(), err)
+			}
+		}
+	}
+
+	return nil
+}
