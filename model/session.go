@@ -48,10 +48,17 @@ type AuthReturnValues struct {
 	Username string  `json:"username"`
 }
 
+type UserCreateParams struct {
+	Username string `json:"username" validate:"required,alphanum,gt=0,lte=64"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password"`
+}
+
 type SessionRepo interface {
 	GetByID(ctx context.Context, id string) (Session, error)
 	GetByUserID(ctx context.Context, id string) ([]Session, error)
 	Create(ctx context.Context, arg SessionCreateParams) (Session, error)
+	CreateUser(ctx context.Context, arg UserCreateParams) (User, error)
 	Update(ctx context.Context, id string, arg SessionUpdateParams) (Session, error)
 	Delete(ctx context.Context, id string) error
 	SignUp(ctx context.Context, arg SignUpParams) (AuthReturnValues, error)

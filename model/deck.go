@@ -32,7 +32,7 @@ type DeckUpdateParams struct {
 
 type DeckRepo interface {
 	Get(ctx context.Context, id string) (Deck, error)
-	GetByUserID(ctx context.Context, userID string) ([]Deck, error)
+	GetByUsername(ctx context.Context, userID string) ([]Deck, error)
 	List(ctx context.Context) ([]Deck, error)
 	Create(ctx context.Context, arg DeckCreateParams) (Deck, error)
 	Update(ctx context.Context, id string, arg DeckUpdateParams) (Deck, error)
