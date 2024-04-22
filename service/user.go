@@ -2,13 +2,11 @@ package service
 
 import (
 	"context"
-	"log"
 
 	"github.com/axseem/learway/model"
 	"github.com/axseem/learway/security"
 	"github.com/axseem/learway/storage"
 	"github.com/go-playground/validator/v10"
-	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
 type User struct {
@@ -33,39 +31,6 @@ func (s User) GetByUsername(ctx context.Context, username string) (model.User, e
 
 func (s User) GetByEmail(ctx context.Context, email string) (model.User, error) {
 	return s.storage.User.GetByEmail(ctx, email)
-}
-
-func (s User) Create(ctx context.Context, arg model.UserCreateParams) (model.User, error) {
-	if err := s.validator.Struct(arg); err != nil {
-		return model.User{}, err
-	}
-
-	if err := security.ValidatePassword(arg.Password); err != nil {
-		return model.User{}, err
-	}
-
-	id, err := gonanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	passwordHash, err := security.HashPassword(arg.Password)
-	if err != nil {
-		return model.User{}, err
-	}
-
-	userCreateParams := storage.UserCreateParams{
-		ID:       id,
-		Username: arg.Username,
-		Email:    arg.Email,
-		Password: passwordHash,
-	}
-
-	if err = s.storage.User.Create(ctx, userCreateParams); err != nil {
-		return model.User{}, err
-	}
-
-	return s.GetByID(ctx, id)
 }
 
 func (s User) UpdatePassword(ctx context.Context, id string, arg model.UserUpdatePasswordParams) (model.User, error) {

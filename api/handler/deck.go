@@ -8,18 +8,18 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type DeckHandler struct {
-	deckService model.DeckRepo
+type Deck struct {
+	service model.DeckRepo
 }
 
-func NewDeckHandler(deckService model.DeckRepo) *DeckHandler {
-	return &DeckHandler{
-		deckService: deckService,
+func NewDeck(service model.DeckRepo) *Deck {
+	return &Deck{
+		service: service,
 	}
 }
 
-func (h DeckHandler) List(c echo.Context) error {
-	decks, err := h.deckService.List(c.Request().Context())
+func (h Deck) List(c echo.Context) error {
+	decks, err := h.service.List(c.Request().Context())
 	if err != nil {
 		return err
 	}
@@ -27,10 +27,10 @@ func (h DeckHandler) List(c echo.Context) error {
 	return c.JSON(http.StatusOK, decks)
 }
 
-func (h DeckHandler) Get(c echo.Context) error {
+func (h Deck) Get(c echo.Context) error {
 	id := c.Param("id")
 
-	deck, err := h.deckService.Get(c.Request().Context(), id)
+	deck, err := h.service.Get(c.Request().Context(), id)
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func (h DeckHandler) Get(c echo.Context) error {
 	return c.JSON(http.StatusOK, deck)
 }
 
-func (h DeckHandler) Create(c echo.Context) error {
+func (h Deck) Create(c echo.Context) error {
 	sessionID, err := c.Cookie("sessionID")
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func (h DeckHandler) Create(c echo.Context) error {
 		return err
 	}
 
-	deck, err := h.deckService.Create(c.Request().Context(), model.DeckCreateParams{
+	deck, err := h.service.Create(c.Request().Context(), model.DeckCreateParams{
 		SessionID: sessionID.Value,
 		Title:     arg.Title,
 		Cards:     arg.Cards,
@@ -63,7 +63,7 @@ func (h DeckHandler) Create(c echo.Context) error {
 	return c.JSON(http.StatusCreated, deck)
 }
 
-func (h DeckHandler) Update(c echo.Context) error {
+func (h Deck) Update(c echo.Context) error {
 	id := c.Param("id")
 
 	var arg model.DeckUpdateParams
@@ -71,7 +71,7 @@ func (h DeckHandler) Update(c echo.Context) error {
 		return err
 	}
 
-	deck, err := h.deckService.Update(c.Request().Context(), id, arg)
+	deck, err := h.service.Update(c.Request().Context(), id, arg)
 	if err != nil {
 		code := echo.ErrInternalServerError.Code
 		message := "failed to update deck"
@@ -81,8 +81,8 @@ func (h DeckHandler) Update(c echo.Context) error {
 	return c.JSON(http.StatusCreated, deck)
 }
 
-func (h DeckHandler) Delete(c echo.Context) error {
-	decks, err := h.deckService.List(c.Request().Context())
+func (h Deck) Delete(c echo.Context) error {
+	decks, err := h.service.List(c.Request().Context())
 	if err != nil {
 		code := echo.ErrInternalServerError.Code
 		message := "failed to list decks"
@@ -92,10 +92,21 @@ func (h DeckHandler) Delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, decks)
 }
 
-func (h DeckHandler) Search(c echo.Context) error {
+func (h Deck) Search(c echo.Context) error {
 	title := c.Param("title")
 
-	decks, err := h.deckService.Search(c.Request().Context(), title)
+	decks, err := h.service.Search(c.Request().Context(), title)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, decks)
+}
+
+func (h Deck) GetByUsername(c echo.Context) error {
+	username := c.Param("username")
+
+	decks, err := h.service.GetByUsername(c.Request().Context(), username)
 	if err != nil {
 		return err
 	}

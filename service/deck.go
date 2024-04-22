@@ -27,8 +27,13 @@ func (s Deck) Get(ctx context.Context, id string) (model.Deck, error) {
 	return s.storage.Deck.Get(ctx, id)
 }
 
-func (s Deck) GetByUserID(ctx context.Context, userID string) ([]model.Deck, error) {
-	return s.storage.Deck.GetByUserID(ctx, userID)
+func (s Deck) GetByUsername(ctx context.Context, username string) ([]model.Deck, error) {
+	user, err := s.storage.User.GetByUsername(ctx, username)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.storage.Deck.GetByUserID(ctx, user.ID)
 }
 
 func (s Deck) List(ctx context.Context) ([]model.Deck, error) {

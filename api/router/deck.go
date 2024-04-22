@@ -5,9 +5,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Deck(api *echo.Group, apiAuth *echo.Group, h *handler.DeckHandler) {
+func Deck(api *echo.Group, apiAuth *echo.Group, h *handler.Deck) {
 	api.GET("/decks", h.List)
 	api.GET("/decks/:title", h.Search)
+	api.GET("/decks/:username", h.GetByUsername)
 	api.GET("/deck/:id", h.Get)
 	apiAuth.PUT("/deck/:id", h.Update)
 	apiAuth.DELETE("/deck/:id", h.Delete)

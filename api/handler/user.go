@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/axseem/learway/api/presenter"
@@ -9,22 +8,20 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type UserHandler struct {
-	userService model.UserRepo
-	deckService model.DeckRepo
+type User struct {
+	service model.UserRepo
 }
 
-func NewUserHandler(userService model.UserRepo, deckService model.DeckRepo) *UserHandler {
-	return &UserHandler{
-		userService: userService,
-		deckService: deckService,
+func NewUser(service model.UserRepo) *User {
+	return &User{
+		service: service,
 	}
 }
 
-func (h UserHandler) Get(c echo.Context) error {
+func (h User) Get(c echo.Context) error {
 	username := c.Param("username")
 
-	user, err := h.userService.GetByUsername(c.Request().Context(), username)
+	user, err := h.service.GetByUsername(c.Request().Context(), username)
 	if err != nil {
 		return err
 	}
@@ -34,21 +31,4 @@ func (h UserHandler) Get(c echo.Context) error {
 		Username:  user.Username,
 		CreatedAt: user.CreatedAt,
 	})
-}
-
-func (h UserHandler) GetDecks(c echo.Context) error {
-	username := c.Param("username")
-
-	user, err := h.userService.GetByUsername(c.Request().Context(), username)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
-	decks, err := h.deckService.GetByUserID(c.Request().Context(), user.ID)
-	if err != nil {
-		return err
-	}
-
-	return c.JSON(http.StatusOK, decks)
 }

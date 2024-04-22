@@ -13,16 +13,14 @@ import (
 )
 
 type Session struct {
-	storage     *storage.Queries
-	userService *User
-	validator   *validator.Validate
+	storage   *storage.Queries
+	validator *validator.Validate
 }
 
-func NewSessionService(storage *storage.Queries, userService *User, validator *validator.Validate) *Session {
+func NewSessionService(storage *storage.Queries, validator *validator.Validate) *Session {
 	return &Session{
-		storage:     storage,
-		userService: userService,
-		validator:   validator,
+		storage:   storage,
+		validator: validator,
 	}
 }
 
@@ -32,6 +30,39 @@ func (s Session) GetByID(ctx context.Context, id string) (model.Session, error) 
 
 func (s Session) GetByUserID(ctx context.Context, id string) ([]model.Session, error) {
 	return s.storage.Session.GetByUserID(ctx, id)
+}
+
+func (s Session) CreateUser(ctx context.Context, arg model.UserCreateParams) (model.User, error) {
+	if err := s.validator.Struct(arg); err != nil {
+		return model.User{}, err
+	}
+
+	if err := security.ValidatePassword(arg.Password); err != nil {
+		return model.User{}, err
+	}
+
+	id, err := gonanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyz", 8)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	passwordHash, err := security.HashPassword(arg.Password)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	userCreateParams := storage.UserCreateParams{
+		ID:       id,
+		Username: arg.Username,
+		Email:    arg.Email,
+		Password: passwordHash,
+	}
+
+	if err = s.storage.User.Create(ctx, userCreateParams); err != nil {
+		return model.User{}, err
+	}
+
+	return s.storage.User.GetByID(ctx, id)
 }
 
 func (s Session) Create(ctx context.Context, arg model.SessionCreateParams) (model.Session, error) {
@@ -72,7 +103,7 @@ func (s Session) SignUp(ctx context.Context, arg model.SignUpParams) (model.Auth
 		return model.AuthReturnValues{}, err
 	}
 
-	user, err := s.userService.Create(ctx, model.UserCreateParams{
+	user, err := s.CreateUser(ctx, model.UserCreateParams{
 		Username: arg.Username,
 		Email:    arg.Email,
 		Password: arg.Password,
@@ -102,7 +133,7 @@ func (s Session) LogIn(ctx context.Context, arg model.LogInParams) (model.AuthRe
 		return model.AuthReturnValues{}, err
 	}
 
-	user, err := s.userService.GetByEmail(ctx, arg.Email)
+	user, err := s.storage.User.GetByEmail(ctx, arg.Email)
 	if err != nil {
 		return model.AuthReturnValues{}, err
 	}

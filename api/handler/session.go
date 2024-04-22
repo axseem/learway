@@ -9,23 +9,23 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type SessionHandler struct {
-	sessionService model.SessionRepo
+type Session struct {
+	service model.SessionRepo
 }
 
-func NewSessionHandler(sessionService model.SessionRepo) *SessionHandler {
-	return &SessionHandler{
-		sessionService: sessionService,
+func NewSession(service model.SessionRepo) *Session {
+	return &Session{
+		service: service,
 	}
 }
 
-func (h SessionHandler) SignUp(c echo.Context) error {
+func (h Session) SignUp(c echo.Context) error {
 	userCreateParams := new(model.UserCreateParams)
 	if err := c.Bind(&userCreateParams); err != nil {
 		return err
 	}
 
-	authResponse, err := h.sessionService.SignUp(c.Request().Context(), model.SignUpParams{
+	authResponse, err := h.service.SignUp(c.Request().Context(), model.SignUpParams{
 		Username:    userCreateParams.Username,
 		Email:       userCreateParams.Email,
 		Password:    userCreateParams.Password,
@@ -47,7 +47,7 @@ func (h SessionHandler) SignUp(c echo.Context) error {
 	})
 }
 
-func (h SessionHandler) LogIn(c echo.Context) error {
+func (h Session) LogIn(c echo.Context) error {
 	email, password, ok := c.Request().BasicAuth()
 	if !ok {
 		var logInParms presenter.LogInParams
@@ -59,7 +59,7 @@ func (h SessionHandler) LogIn(c echo.Context) error {
 		password = logInParms.Password
 	}
 
-	authResponse, err := h.sessionService.LogIn(c.Request().Context(), model.LogInParams{
+	authResponse, err := h.service.LogIn(c.Request().Context(), model.LogInParams{
 		Email:       email,
 		Password:    password,
 		Fingerprint: []byte(c.Request().UserAgent()),
@@ -80,13 +80,13 @@ func (h SessionHandler) LogIn(c echo.Context) error {
 	})
 }
 
-func (h SessionHandler) GetSession(c echo.Context) error {
+func (h Session) GetSession(c echo.Context) error {
 	sessionID, err := c.Cookie("sessionID")
 	if err != nil {
 		return err
 	}
 
-	session, err := h.sessionService.GetByID(c.Request().Context(), sessionID.Value)
+	session, err := h.service.GetByID(c.Request().Context(), sessionID.Value)
 	if err != nil {
 		return echo.ErrUnauthorized
 	}
