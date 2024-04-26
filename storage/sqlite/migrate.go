@@ -79,7 +79,7 @@ func getAppliedMigrations(name string) ([]string, os.File) {
 	return appliedMigrations, *appliedMigrationsFile
 }
 
-func ForceMigrate(db *sql.DB, name string) error {
+func ForceMigrate(db *sql.DB) error {
 	entries, err := embedMigration.ReadDir("migrations")
 	if err != nil {
 		return fmt.Errorf("failed to read migration directory: %w", err)
