@@ -56,10 +56,11 @@ func (s Deck) Create(ctx context.Context, arg model.DeckCreateParams) (model.Dec
 	}
 
 	err = s.storage.Deck.Create(ctx, storage.DeckCreateParams{
-		ID:     id,
-		UserID: session.UserID,
-		Title:  arg.Title,
-		Cards:  arg.Cards,
+		ID:      id,
+		UserID:  session.UserID,
+		Title:   arg.Title,
+		Cards:   arg.Cards,
+		Subject: arg.Subject,
 	})
 	if err != nil {
 		return model.Deck{}, err

@@ -21,7 +21,8 @@ type Deck struct {
 type DeckCreateParams struct {
 	SessionID string `json:"sessionID"`
 	Title     string `json:"title" validate:"required,gt=0,lte=256"`
-	Cards     Cards  `json:"cards" validate:"required,gt=0,lte=4096,dive,required,dive,required,gt=0,lte=1024"`
+	Cards     Cards  `json:"cards" validate:"required,gt=1,lte=4096,dive,required,dive,required,gt=0,lte=1024"`
+	Subject   string `json:"subject" validate:"lte=32"`
 }
 
 type DeckUpdateParams struct {

@@ -43,7 +43,7 @@ func (s User) UpdatePassword(ctx context.Context, id string, arg model.UserUpdat
 		return model.User{}, err
 	}
 
-	if err = security.CompareHashAndPassword(arg.CurrentPassword, user.Password); err != nil {
+	if err = security.CompareHashAndPassword(user.Password, arg.CurrentPassword); err != nil {
 		return model.User{}, err
 	}
 

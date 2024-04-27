@@ -138,7 +138,7 @@ func (s Session) LogIn(ctx context.Context, arg model.LogInParams) (model.AuthRe
 		return model.AuthReturnValues{}, err
 	}
 
-	if err = security.CompareHashAndPassword(arg.Password, user.Password); err != nil {
+	if err = security.CompareHashAndPassword(user.Password, arg.Password); err != nil {
 		return model.AuthReturnValues{}, err
 	}
 
